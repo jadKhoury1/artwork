@@ -25,7 +25,7 @@ const Trigger = ({ children }) => {
         <>
             <div onClick={toggleOpen}>{children}</div>
 
-            {open && <div className="fixed inset-0 z-40" onClick={() => setOpen(false)}></div>}
+            {open && <div className="fixed inset-0 z-10" onClick={() => setOpen(false)}></div>}
         </>
     );
 };
@@ -41,11 +41,7 @@ const Content = ({ align = 'right', width = '48', contentClasses = 'py-1 bg-whit
         alignmentClasses = 'origin-top-right right-0';
     }
 
-    let widthClasses = '';
-
-    if (width === '48') {
-        widthClasses = 'w-48';
-    }
+    const widthClasses = `w-${width}`;
 
     return (
         <>
@@ -60,7 +56,7 @@ const Content = ({ align = 'right', width = '48', contentClasses = 'py-1 bg-whit
                 leaveTo="opacity-0 scale-95"
             >
                 <div
-                    className={`absolute z-50 mt-2 rounded-md shadow-lg ${alignmentClasses} ${widthClasses}`}
+                    className={`absolute z-20 mt-2 rounded-md shadow-lg ${alignmentClasses} ${widthClasses}`}
                     onClick={() => setOpen(false)}
                 >
                     <div className={`rounded-md ring-1 ring-black ring-opacity-5 ` + contentClasses}>{children}</div>
@@ -86,6 +82,7 @@ const DropdownLink = ({ className = '', children, ...props }) => {
 
 Dropdown.Trigger = Trigger;
 Dropdown.Content = Content;
+Dropdown.Context = DropDownContext;
 Dropdown.Link = DropdownLink;
 
 export default Dropdown;
