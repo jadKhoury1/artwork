@@ -13,7 +13,7 @@ const cards = [
 
 const HotBid = () => {
     return (
-        <Section title="Hot Bid" grayBg={true}>
+        <Section title="Hot Bid" grayBg={true} className="py-10">
             <div className="bid-slider">
                 <Slider>
                     { cards.map((card, index) => <Card card={card} key={index}/>) }

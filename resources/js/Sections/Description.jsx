@@ -1,5 +1,6 @@
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
+import { Link, } from "@inertiajs/react";
 
 const Description = () => {
     return (
@@ -15,8 +16,12 @@ const Description = () => {
                         mollit id pariatur in voluptate cillum.
                     </p>
                     <div className="flex mt-7">
-                        <SecondaryButton className="text-xs">Discover More</SecondaryButton>
-                        <PrimaryButton className="text-xs ml-7">Create Item</PrimaryButton>
+                        <Link href={route('items.search')}>
+                            <SecondaryButton className="text-xs">Discover More</SecondaryButton>
+                        </Link>
+                        <Link href={route('items.create')}>
+                            <PrimaryButton className="text-xs ml-7">Create Item</PrimaryButton>
+                        </Link>
                     </div>
                 </div>
                 <div className="grid lg:grid-cols-3 grid-cols-2 gap-4">

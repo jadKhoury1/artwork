@@ -6,9 +6,11 @@ import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ThemeContext } from '@/Context/StateContext';
+import registerCustomValidationRules from '@/Validation/setCutomRules';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
+registerCustomValidationRules();
 
 const BaseComponent = ({ children }) => {
     const [theme, setTheme] = useState('light');

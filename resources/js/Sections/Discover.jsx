@@ -29,6 +29,8 @@ const Discover = () => {
             title="Discover" 
             subTitle="Create, explore, &amp; collect digital art" 
             button="Start Search"
+            buttonHref="items.search"
+            className="py-10"
         >
             <div>
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">

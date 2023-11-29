@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react';
-import cn from "classnames";
-import Dropdown from "./Dropdown"
-import Icon from "./Icon";
-import Input from "./Input";
-import InputLabel from "./InputLabel";
+import cn from 'classnames';
+import Dropdown from './Dropdown';
+import Icon from './Icon';
+import Input from './Input';
+import InputLabel from './InputLabel';
 
 
 const ColorInput = ({ color }) => {
@@ -27,7 +27,7 @@ const ColorInput = ({ color }) => {
     );
 }
 
-const ColorSearch = ({ withLabel = true }) => {
+const ColorSearch = ({ withLabel = true, handleChange }) => {
 
     const [color, setColor] = useState('Any Color');
 
@@ -37,7 +37,9 @@ const ColorSearch = ({ withLabel = true }) => {
 
     return (
         <div>
-            {withLabel && <InputLabel>Select Color</InputLabel>}
+            {withLabel  && <div className="my-4">
+                <InputLabel>SELECT COLOR</InputLabel>
+            </div>}
             <div>
                 <Dropdown>
                     <Dropdown.Trigger>
@@ -50,8 +52,8 @@ const ColorSearch = ({ withLabel = true }) => {
                                     <div
                                         key={color}
                                         onClick={() => {
-                                            console.log('Updating Color');
                                             setColor(color);
+                                            handleChange(color)
                                         }}
                                         className="my-2 hover:text-indigo-600 hover:cursor-pointer"
                                     >

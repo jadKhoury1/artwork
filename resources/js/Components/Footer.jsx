@@ -10,13 +10,13 @@ const Footer = () => {
     const { theme } = useContext(ThemeContext);
 
     return (
-        <div className="text-white p-10 md:px-40 md:py-10 lg:px-60 lg:py-20 bg-indigo-600 dark:bg-slate-800 -mt-5">
+        <div className="text-white p-10 md:px-40 md:py-10 lg:px-60 lg:py-20 bg-indigo-600 dark:bg-slate-800">
              <div className="grid grid-cols-1 md:grid-cols-3 gap-12"> 
                 <div className={cs(
                     "flex flex-col h-48 items-center md:items-start border-b border-white md:border-0 pb-10 md:pb-0"
                 )}>
                     <div>
-                        <Link href="/">
+                        <Link href={route('welcome')}>
                             <img 
                                 className="block h-14 w-auto fill-current"
                                 alt="Logo"
@@ -36,7 +36,7 @@ const Footer = () => {
                     <h3 className="grow">Menu</h3>
                     <div className="my-2">
                         <NavLink 
-                            href={route('welcome')} active={route().current('welcome')} 
+                            href={route('items.search')} active={route().current('items.search')} 
                             className="text-white font-black hover:text-white"
                         >
                             Discover
@@ -45,7 +45,7 @@ const Footer = () => {
 
                     <div className="my-2">
                         <NavLink 
-                            href="/" 
+                            href={route('items.create')} active={route().current('items.create')}
                             className="text-white font-bold hover:text-white"
                         >
                             Create Item
@@ -54,7 +54,7 @@ const Footer = () => {
 
                     <div className="my-2">
                         <NavLink 
-                            href="/" 
+                            href={route('about')} active={route().current('about')}
                             className="text-white font-bold hover:text-white "
                         >
                             About Us

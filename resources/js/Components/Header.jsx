@@ -4,10 +4,12 @@ import cn from "classnames";
 import NavLink from "./NavLink";
 import Icon from "./Icon";
 import Theme from "./Theme";
+import User from "./User";
+import MobileNavLink from "./MobileNavLink";
 
 
 const Header = () => {
-    const {auth} = usePage();
+    const {props: {auth}} = usePage();
 
     const [isVisibleMenu, setVisibleMenu] = useState(false);
 
@@ -55,7 +57,7 @@ const Header = () => {
                         </div>
                         <div className="flex justify-center grow md:justify-start">
                             <div className="shrink-0 flex items-center">
-                                <Link href="/">
+                                <Link href={route('welcome')}>
                                     <img 
                                         className="block h-14 pr-5 w-auto fill-current md:border-r md:border-gray-500 md:border-solid"
                                         alt="Logo"
@@ -64,19 +66,19 @@ const Header = () => {
                                 </Link>
                             </div>
                             <div className="hidden space-x-8 md:-my-px md:ml-10 md:flex">
-                                <NavLink href={route('welcome')} active={route().current('welcome')}>
+                                <NavLink href={route('items.search')} active={route().current('items.search')}>
                                     Discover
                                 </NavLink>
                             </div>
 
                             <div className="hidden space-x-8 md:-my-px md:ml-10 md:flex">
-                                <NavLink href="/">
+                                <NavLink href={route('items.create')} active={route().current('items.create')}>
                                     Create Item
                                 </NavLink>
                             </div>
 
                             <div className="hidden space-x-8 md:-my-px md:ml-10 md:flex">
-                                <NavLink href="/">
+                                <NavLink href={route('about')} active={route().current('about')}>
                                     About Us
                                 </NavLink>
                             </div>
@@ -86,8 +88,8 @@ const Header = () => {
                             <div className="flex items-center md:ml-7">
                                 <Theme />
                             </div>
-                            <div className="hidden md:flex md:ml-7">
-                                <NavLink href="/" className="fill-gray-500 hover:fill-gray-700 dark:fill-gray-300">
+                            <div className="hidden md:flex md:ml-7 h-full">
+                                <NavLink href={route('items.search')} className="fill-gray-500 hover:fill-gray-700 dark:fill-gray-300">
                                     <Icon name="search" size="20" className="mr-2"/>
                                     <span className="font-bold">
                                         Search
@@ -95,14 +97,17 @@ const Header = () => {
                                 </NavLink>
                             </div>
                             <div className="flex items-center ml-3 md:ml-7">
-                                <button 
-                                    className={cn(
-                                        "rounded-full border-0 md:border-2 border-indigo-600 dark:text-white text-indigo-600 md:text-indigo-600 dark:md:text-indigo-600 py-2 px-4",
-                                        "md:hover:bg-indigo-600 md:hover:text-white dark:md:hover:text-white font-bold"
-                                    )}
-                                >
-                                    Login
-                                </button>
+                                { auth.user ? <User /> : 
+                                    <Link
+                                        href={route('login')}
+                                        className={cn(
+                                            "rounded-full border-0 md:border-2 border-indigo-600 dark:text-white text-indigo-600 md:text-indigo-600 dark:md:text-indigo-600 py-2 px-4",
+                                            "md:hover:bg-indigo-600 md:hover:text-white dark:md:hover:text-white font-bold"
+                                        )}
+                                    >
+                                        Login
+                                    </Link>
+                                }
                             </div>
                         </div>
                     </div>
@@ -110,10 +115,9 @@ const Header = () => {
                 {/* Mobile menu, show/hide based on menu state. */}
                 <div className={cn({"hidden": !isVisibleMenu},"md:hidden bg-white dark:bg-black")} id="mobile-menu">
                     <div className="space-y-1 px-2 pb-3 pt-2">
-                        {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-                        <a href="#" className="bg-gray-200 dark:bg-gray-900 text-indigo-600 block rounded-md px-3 py-2 text-base font-bold" aria-current="page">Discover</a>
-                        <a href="#" className="text-gray-500 dark:text-gray-300 hover:text-gray-700 focus:text-gray-700 block rounded-md px-3 py-2 text-base font-bold">Create Item</a>
-                        <a href="#" className="text-gray-500 dark:text-gray-300 hover:text-gray-700 focus:text-gray-700 block rounded-md px-3 py-2 text-base font-bold">About Us</a>
+                        <MobileNavLink href={route('items.search')} active={route().current('items.search')}>Discover</MobileNavLink>
+                        <MobileNavLink href={route('items.create')} active={route().current('items.create')}>Create Item</MobileNavLink>
+                        <MobileNavLink href={route('about')} active={route().current('about')}>About Us</MobileNavLink>
                     </div>
                 </div>
             </nav>

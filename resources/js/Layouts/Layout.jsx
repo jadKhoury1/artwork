@@ -2,12 +2,12 @@ import Header from "@/Components/Header";
 import Footer from "@/Components/Footer";
 
 
-const Layout = ({ children }) => {
+const Layout = ({ children, hasFooter = true }) => {
     return (
         <div className="min-h-screen dark:bg-black">
             <Header /> 
             <main>{children}</main>
-            <Footer />
+            { hasFooter ? <Footer /> : null }
         </div>
     );
 };

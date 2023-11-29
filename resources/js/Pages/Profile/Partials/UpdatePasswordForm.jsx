@@ -1,12 +1,15 @@
-import { useRef } from 'react';
+import { useRef, useContext } from 'react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
+import SecondaryButton from '@/Components/SecondaryButton';
 import TextInput from '@/Components/TextInput';
 import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
+import { ThemeContext } from '@/Context/StateContext';
 
 export default function UpdatePasswordForm({ className = '' }) {
+    const { theme } = useContext(ThemeContext);
     const passwordInput = useRef();
     const currentPasswordInput = useRef();
 
@@ -39,9 +42,9 @@ export default function UpdatePasswordForm({ className = '' }) {
     return (
         <section className={className}>
             <header>
-                <h2 className="text-lg font-medium text-gray-900">Update Password</h2>
+                <h2 className="text-lg font-medium text-gray-900 dark:text-gray-500">Update Password</h2>
 
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
                     Ensure your account is using a long, random password to stay secure.
                 </p>
             </header>
@@ -56,7 +59,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                         value={data.current_password}
                         onChange={(e) => setData('current_password', e.target.value)}
                         type="password"
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full dark:text-white dark:bg-slate-800"
                         autoComplete="current-password"
                     />
 
@@ -72,7 +75,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                         value={data.password}
                         onChange={(e) => setData('password', e.target.value)}
                         type="password"
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full dark:text-white dark:bg-slate-800"
                         autoComplete="new-password"
                     />
 
@@ -87,7 +90,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                         value={data.password_confirmation}
                         onChange={(e) => setData('password_confirmation', e.target.value)}
                         type="password"
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full dark:text-white dark:bg-slate-800"
                         autoComplete="new-password"
                     />
 
@@ -95,7 +98,10 @@ export default function UpdatePasswordForm({ className = '' }) {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
+                    {theme === 'light' ? 
+                        <PrimaryButton disabled={processing}>Save</PrimaryButton> :
+                        <SecondaryButton disabled={processing}>Save</SecondaryButton>
+                    }
 
                     <Transition
                         show={recentlySuccessful}

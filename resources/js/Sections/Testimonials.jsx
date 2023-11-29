@@ -25,7 +25,7 @@ const testimonialsList = [
 
 const Testimonials = ({ }) => {
     return (
-        <Section title="Testimonials" grayBg={true}>
+        <Section title="Testimonials" grayBg={true} className="py-10">
             <div className="text-center my-10">
                 <div className="grid md:grid-cols-3 md:gap-5 lg:gap-10 gap-y-10 mb-5">
                     {testimonialsList.map(({name, description, backgroundColor, imageName}) => (

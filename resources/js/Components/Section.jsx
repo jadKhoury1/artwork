@@ -1,10 +1,11 @@
+import { Link, router } from '@inertiajs/react';
 import cn from 'classnames';
 import PrimaryButton from './PrimaryButton';
 import SecondaryButton from "./SecondaryButton";
 
-const Section = ({title, subTitle, button, grayBg, className, children}) => {
+const Section = ({title, subTitle, button, buttonHref = 'welcome', grayBg, className, children}) => {
     return (
-        <section className={cn({'bg-gray-100': grayBg}, 'py-10 my-5 dark:bg-black', className)}>
+        <section className={cn({'bg-gray-100': grayBg}, 'dark:bg-black', className)}>
             <div className="container mx-auto">
                 <div className="flex flex-col">
                     {subTitle && <h4 className="text-sm font-semibold text-gray-500 dark:text-gray-400">{subTitle}</h4>}
@@ -19,8 +20,12 @@ const Section = ({title, subTitle, button, grayBg, className, children}) => {
                         { button && 
                             <div className="w-full lg:w-3/5 my-3 flex justify-center">
                                 <div className="group w-full lg:w-auto">
-                                    <SecondaryButton className="hidden w-full lg:w-auto group-hover:block font-bold text-md">{button}</SecondaryButton>
-                                    <PrimaryButton className="w-full lg:w-auto  group-hover:hidden font-bold text-md">{button}</PrimaryButton>
+                                    <Link href={route(buttonHref)}>
+                                        <SecondaryButton className="hidden w-full lg:w-auto group-hover:block font-bold text-md">{button}</SecondaryButton>
+                                    </Link>
+                                    <Link href={route(buttonHref)}>
+                                        <PrimaryButton className="w-full lg:w-auto  group-hover:hidden font-bold text-md">{button}</PrimaryButton>
+                                    </Link>
                                 </div>
                             </div>
                         }
