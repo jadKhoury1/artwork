@@ -27,15 +27,36 @@ input[type=number] {
 }
 
 .bid-slider .slick-initialized .slick-slide {
-    padding-right: 16px;
+  padding-right: 16px;
 }
 
 .testimonials-bg {
-    background: radial-gradient(50% 123.47% at 50% 50%, #00ff94 0%, #720059 100%),
-        linear-gradient(121.28deg, #669600 0%, #ff0000 100%),
-        linear-gradient(360deg, #0029ff 0%, #8fff00 100%),
-        radial-gradient(100% 164.72% at 100% 100%, #6100ff 0%, #00ff57 100%),
-        radial-gradient(100% 148.07% at 0% 0%, #fff500 0%, #51d500 100%);
+  background: radial-gradient(50% 123.47% at 50% 50%, #00ff94 0%, #720059 100%),
+      linear-gradient(121.28deg, #669600 0%, #ff0000 100%),
+      linear-gradient(360deg, #0029ff 0%, #8fff00 100%),
+      radial-gradient(100% 164.72% at 100% 100%, #6100ff 0%, #00ff57 100%),
+      radial-gradient(100% 148.07% at 0% 0%, #fff500 0%, #51d500 100%);
 
-    background-blend-mode: screen, color-dodge, overlay, difference, normal;
+  background-blend-mode: screen, color-dodge, overlay, difference, normal;
+}
+
+.loader {
+  border: 8px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 10px solid rgb(79 70 229);
+  width: 80px;
+  height: 80px;
+  -webkit-animation: spin 1s linear infinite; /* Safari */
+  animation: spin 1s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

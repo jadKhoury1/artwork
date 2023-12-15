@@ -1,76 +1,108 @@
-import { useState  } from "react";
-import { make, ruleIn } from "simple-body-validator";
-import { FiTrash2 } from "react-icons/fi";
-import Layout from "@/Layouts/Layout";
-import Section from "@/Components/Section";
-import InputLabel from "@/Components/InputLabel";
-import Input from "@/Components/Input";
-import ColorSearch from "@/Components/ColorSearch";
-import CollectionCard from "./Partials/CollectionCard";
-import ImageUpload from "./Partials/ImageUpload";
-import PrimaryButton from "@/Components/PrimaryButton";
-import SecondaryButton from "@/Components/SecondaryButton";
+import { useEffect, useState } from 'react';
+import { useForm } from '@inertiajs/react'
+import { make, ruleIn } from 'simple-body-validator';
+import { FiTrash2 } from 'react-icons/fi';
+import Layout from '@/Layouts/Layout';
+import Section from '@/Components/Section';
+import InputLabel from '@/Components/InputLabel';
+import Input from '@/Components/Input';
+import ColorSearch from '@/Components/ColorSearch';
+import CollectionCard from './Partials/CollectionCard';
+import ImageUpload from './Partials/ImageUpload';
+import PrimaryButton from '@/Components/PrimaryButton';
+import SecondaryButton from '@/Components/SecondaryButton';
 
 // https://www.simple-body-validator.com/available-validation-rules
 const rules = {
-    image: ['bail', 'required_without:imageUrl', 'image', 'max_file_size:1'],
-    imageUrl: ['required', 'url'],
-    title: ['required', 'string', 'min:5', 'max:100'],
-    description: ['required', 'string', 'min:10', 'max:250'],
+    imageId: ['required', 'integer', 'strict'],
+    title: ['required', 'string', 'min:3', 'max:100'],
+    description: ['required', 'string', 'min:10', 'max:500'],
     color: ['required', ruleIn(['any', 'red', 'yellow', 'green', 'blue'])],
-    price: ['bail', 'required', 'numeric', 'min:1', 'max:999999'],
-    count: ['bail', 'required', 'integer', 'min:1', 'max:999999'],
-    category: ['required', ruleIn(['sale', 'artwork', 'digital', 'photography'])]
+    price: ['bail', 'required', 'numeric', 'strict', 'min:1', 'max:999999'],
+    count: ['bail', 'required', 'integer', 'strict', 'min:1', 'max:999999'],
+    collections: ['required', 'array_unique', 'max:2'],
 };
 
 const initialData = {
-    image: '',
-    imageUrl: '',
+    imageId: '',
     title: '',
     description: '',
     color: 'any',
     price: '',
     count: '',
-    category: ''
+    collections: []
 };
 
 const validator = make(initialData, rules)
     .setCustomMessages({
-        'image.required_without': 'The image field is required'
+        'collections.required': 'The item must at least belong to one collection.',
+        'collections.max': 'The item cannot have more than 2 collections.'
     })
     .setCustomAttributes({
-        category: 'collection'
+        imageId: 'image'
     });
 
-const Create = () => {
-
-    const [data, setData] = useState(initialData);
+const Create = ({ collections }) => {
+    const { data, setData, post, errors: serverErrors, processing } = useForm(initialData);
+    const [imageUrl, setImageUrl] = useState('');
     const [errors, setErrors] = useState(validator.errors());
 
-    const onImageUpload = image => {
-        validator.validate('image', image)
-        setErrors(validator.errors());
-
-        if (validator.errors().has('image')) {
-            return;
-        }
-
-        setData({
-            ...data, imageUrl: URL.createObjectURL(image[0])
-        });         
-    };
+    useEffect(() => {
+        setErrors(validator.setErrors(serverErrors));
+    }, [serverErrors]);
 
     // Update form data
     const handleInputChange = ({ target: { name, value } }) => {
+        if (name === 'count' || name === 'price') {
+            value  = Number(value);
+        }
         setData({
             ...data,
             [name]: value
         });  
     };
 
+    const removeImage = () => {
+        setImageUrl('');
+        setData({ ...data, imageId: '' });
+    };
+
+    const onImageUpload = (id, url) => {
+        setImageUrl(url);
+        setData({ ...data, imageId: id });
+        setErrors(validator.clearErrors('imageId'));
+    };
+
     const submit = () => {
         validator.setData(data).validate();
         setErrors(validator.errors());
+
+        if (validator.errors().keys().length > 0) {
+            return;
+        }
+        post(route('items.store'));
+    };
+
+    const addOrRemoveCollection = collectionId => {
+        const index = data.collections.indexOf(collectionId);
+        const updatedCollections = [ ...data.collections ];
+        if (index === -1) {
+            updatedCollections.push(collectionId);
+        } else {
+            updatedCollections.splice(index, 1);
+        }
+        setData({ ...data, collections: updatedCollections });
+    };
+
+    const renderCollections = () => {
+        return collections.map(({ id, value }) => (
+            <CollectionCard 
+                key={id}
+                title={value}
+                active={data.collections.includes(id)} 
+                onClick={() => addOrRemoveCollection(id)} 
+            />
+        ));
     };
 
     return (
@@ -78,32 +110,37 @@ const Create = () => {
             <Section title="Create Item">
                 <div className="grid grid-cols-1 lg:grid-cols-3 min-h-screen mb-28">
                     <div className="border-black lg:col-span-2 lg:pr-32">
-                        {/*IMAGE UPLOAD SECTION*/}
+                        {/* IMAGE UPLOAD SECTION */}
                         <div>
                             <div className="mt-10 mb-5 font-bold dark:text-white text-lg flex items-center">
                                 UPLOAD IMAGE
-                                { data.imageUrl ? <span 
-                                    onClick={() => setData({ ...data, imageUrl: '', image: '' })}
+                                {/* Remove image when clicked */}
+                                { data.imageId ? <span 
+                                    onClick={removeImage}
                                     className="ml-5 text-red-600 cursor-pointer"    
                                 >
                                     <FiTrash2 />
                                 </span> : null }
                             </div>
-                            {
-                                data.imageUrl ? 
-                                <div className="h-96 overflow-hidden">
-                                    <img src={data.imageUrl} alt="item image" className="h-full object-cover object-center" />
-                                </div> : 
-                                <>
-                                    <ImageUpload onImageUpload={onImageUpload}/>
-                                    {errors.has('image') ? <div className="mt-4 text-red-500">{errors.first('image')}</div> : null }
-                                </>
-                            }
+                            <div>
+                                {!imageUrl ? <>
+                                    <ImageUpload 
+                                        onImageUpload={onImageUpload}
+                                        onError={errors => setErrors(validator.setErrors({ imageId: errors }))}
+                                    />
+                                </> : <>
+                                    {/** Show image after successful upload */}
+                                    <div className="h-96 overflow-hidden">
+                                        <img src={imageUrl} alt="item image" className="h-full object-cover object-center" />
+                                    </div> 
+                                </>}
+                                {errors.has('imageId') ? <div className="mt-4 text-red-500">{errors.first('imageId')}</div> : null }
+                            </div>
                         </div>
-                        {/*ITEM DETAILS*/}
+                        {/* ITEM DETAILS */}
                         <div>
                             <div className="mt-10 mb-5 font-bold dark:text-white text-lg">ITEM DETAILS</div>
-                            {/*ITEM TITLE*/}
+                            {/* ITEM TITLE */}
                             <div>
                                 <div className="my-4">
                                     <InputLabel>ITEM TITLE</InputLabel>
@@ -116,7 +153,7 @@ const Create = () => {
                                 />
                                     {errors.has('title') ? <div className="mt-4 text-red-500">{errors.first('title')}</div> : null}
                             </div>
-                            {/*ITEM DESCRIPTION*/}
+                            {/* ITEM DESCRIPTION */}
                             <div className="my-2">
                                 <div className="my-4">
                                     <InputLabel>DESCRIPTION</InputLabel>
@@ -130,13 +167,13 @@ const Create = () => {
                                  {errors.has('description') ? <div className="mt-4 text-red-500">{errors.first('description')}</div> : null}
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-x-5">
-                                {/*ITEM COLOR*/}
+                                {/* ITEM COLOR */}
                                 <div>
                                     <ColorSearch 
                                         handleChange={color => setData({...data, color: color.toLowerCase()})}
                                     />
                                 </div>
-                                {/*ITEM PRICE*/}
+                                {/* ITEM PRICE */}
                                 <div>
                                     <div className="my-4">
                                         <InputLabel>PRICE</InputLabel>
@@ -149,7 +186,7 @@ const Create = () => {
                                     />
                                     {errors.has('price') ? <div className="mt-4 text-red-500">{errors.first('price')}</div> : null}
                                 </div>
-                                {/*ITEM COOUNT*/}
+                                {/* ITEM COOUNT */}
                                 <div>
                                     <div className="my-4">
                                         <InputLabel>COUNT</InputLabel>
@@ -165,18 +202,17 @@ const Create = () => {
                             </div>
                         </div>
                         <div>
-                            <div className="mt-10 mb-5 font-bold dark:text-white text-lg">CHOOSE COLLECTION</div>
+                            <div className="mt-10 mb-5 font-bold dark:text-white text-lg">CHOOSE COLLECTIONS</div>
                             <div className="h-28 flex space-x-3 overflow-x-auto no-scrollbar">
-                                <CollectionCard title="Sale" active={data.category === 'sale'} onClick={() => setData({ ...data, category: 'sale' })} />
-                                <CollectionCard title="Digital" active={data.category === 'digital'} onClick={() => setData({ ...data, category: 'digital' })} />
-                                <CollectionCard title="Photography" active={data.category === 'photography'} onClick={() => setData({ ...data, category: 'photography' })}/>
-                                <CollectionCard title="Artwork" active={data.category === 'artwork'} onClick={() => setData({ ...data, category: 'artwork' })} />
+                                {renderCollections()}
                             </div>
-                            {errors.has('category') ? <div className="mt-4 text-red-500">{errors.first('category')}</div> : null}
+                            {errors.has('collections') ? <div className="mt-4 text-red-500">{errors.first('collections')}</div> : null}
                         </div>
                         <div className="mt-16">
+                            {processing ? <div className="loader"></div> : <>
                             <PrimaryButton className="dark:hidden" onClick={submit}>Create Item</PrimaryButton>
                             <SecondaryButton className="hidden dark:block" onClick={submit}>Create Item</SecondaryButton>
+                            </>}
                         </div>
                     </div>
                     <div>

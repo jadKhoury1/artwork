@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -37,6 +38,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('items/create', [ItemController::class, 'create'])->name('items.create');
+    Route::post('items/create', [ItemController::class, 'store'])->name('items.store');
     Route::get('items/search', [ItemController::class, 'index'])
         ->withoutMiddleware('auth')
         ->name('items.search');

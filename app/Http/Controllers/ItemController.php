@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tag;
+use App\Models\Item;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreItemRequest;
 
 class ItemController extends Controller
 {
@@ -20,15 +23,30 @@ class ItemController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Items/Create');
+        return Inertia::render('Items/Create', [
+            'collections' => Tag::select(['id', 'value'])->where('key', 'collection')->get(),
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreItemRequest $request)
     {
-        //
+        $data = $request->validated();
+        $itemData = [
+            'user_id'     => $request->user()->id,
+            'image_id'    => $data['imageId'],
+            'status'      => Item::$STATUS_ACTIVE,
+            'title'       => $data['title'],
+            'description' => $data['description'],
+            'color'       => $data['color'],
+            'price'       => $data['price'],
+            'count'       => $data['count']
+        ];
+        $item = Item::create($itemData);
+        $item->tags()->sync($data['collections']);
+        return redirect('/');
     }
 
     /**

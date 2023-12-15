@@ -11,15 +11,14 @@ export default () => {
         if (!value instanceof File) {
             return false;
         }
-        
-        return value[0].type.match(/^image\/(jpg|jpeg|png)$/)
+        return value[0].type.match(/^image\/(jpg|jpeg|png|webp)$/)
     });
 
-    // Register a rule that validates the max size of a file in GB
+    // Register a rule that validates the max size of a file in MB
     register('max_file_size', (value, [ maxSize ]) => {
         if (!value instanceof File) {
             return false;
         }
-        return value[0].size / 1073741824  <= maxSize;
+        return value[0].size / 1048576  <= maxSize;
     }, (message, [ maxSize ]) => message.replace(':size', maxSize));
 };
