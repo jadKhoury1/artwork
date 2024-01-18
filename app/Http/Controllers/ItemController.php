@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ItemResource;
 use App\Models\Tag;
 use App\Models\Item;
 use Inertia\Inertia;
@@ -46,15 +47,16 @@ class ItemController extends Controller
         ];
         $item = Item::create($itemData);
         $item->tags()->sync($data['collections']);
-        return redirect('/');
+        return redirect('/items/' . $item->id);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Item $item)
     {
-        //
+        $item->load(['image', 'tags']);
+        return Inertia::render('Items/Details', ['data' => new ItemResource($item)]);
     }
 
     /**

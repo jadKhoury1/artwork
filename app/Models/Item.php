@@ -32,12 +32,23 @@ class Item extends Model
      *
      * @return BelongsTo
      */
-    public function user(): BelongsTo {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 
     /**
-     * The images that belong to the item
+     * Get the image that belongs to the item
+     *
+     * @return BelongsTo
+     */
+    public function image(): BelongsTo
+    {
+        return $this->belongsTo(Image::class);
+    }
+
+    /**
+     * Get the tags that belong to the item
      *
      * @return BelongsToMany
      */

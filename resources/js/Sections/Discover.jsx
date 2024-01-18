@@ -35,13 +35,13 @@ const Discover = () => {
             <div>
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
                     <div className="hidden lg:block">
-                        <ColorSearch withLabel={false}/>
+                        <ColorSearch withLabel={false} handleChange={() => '' }/>
                     </div>
                     <div className="lg:col-span-2">
                         <Tabs list={['Sale', 'Special Offer', 'Cosmos', 'Artwork']} selected="Sale"/>
                     </div>
                     <div className="block lg:hidden">
-                        <ColorSearch withLabel={false}/>
+                        <ColorSearch withLabel={false} handleChange={() => '' }/>
                     </div>
                     <div className="lg:justify-self-center">
                         <button

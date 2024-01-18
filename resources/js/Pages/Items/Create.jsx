@@ -10,7 +10,10 @@ import ColorSearch from '@/Components/ColorSearch';
 import CollectionCard from './Partials/CollectionCard';
 import ImageUpload from './Partials/ImageUpload';
 import PrimaryButton from '@/Components/PrimaryButton';
+import ItemDetails from '../../Sections/ItemDetails';
+import Modal from '@/Components/Modal';
 import SecondaryButton from '@/Components/SecondaryButton';
+import Icon from '@/Components/Icon';
 
 // https://www.simple-body-validator.com/available-validation-rules
 const rules = {
@@ -45,6 +48,7 @@ const validator = make(initialData, rules)
 const Create = ({ collections }) => {
     const { data, setData, post, errors: serverErrors, processing } = useForm(initialData);
     const [imageUrl, setImageUrl] = useState('');
+    const [preview, setPreview] = useState(false);
     const [errors, setErrors] = useState(validator.errors());
 
     useEffect(() => {
@@ -74,9 +78,10 @@ const Create = ({ collections }) => {
     };
 
     const submit = () => {
+        console.log('SUBMITTED DATA: ', data);
         validator.setData(data).validate();
         setErrors(validator.errors());
-
+        console.log('ERRORS: ', validator.errors().all());
         if (validator.errors().keys().length > 0) {
             return;
         }
@@ -209,14 +214,51 @@ const Create = ({ collections }) => {
                             {errors.has('collections') ? <div className="mt-4 text-red-500">{errors.first('collections')}</div> : null}
                         </div>
                         <div className="mt-16">
+                            <SecondaryButton className="mr-5 lg:hidden" onClick={() => setPreview(true)}>Preview</SecondaryButton>
                             {processing ? <div className="loader"></div> : <>
-                            <PrimaryButton className="dark:hidden" onClick={submit}>Create Item</PrimaryButton>
-                            <SecondaryButton className="hidden dark:block" onClick={submit}>Create Item</SecondaryButton>
+                            <PrimaryButton onClick={submit}>Create Item</PrimaryButton>
                             </>}
                         </div>
                     </div>
-                    <div>
+                    <div className="p-8 hidden lg:block">
+                        <div 
+                            className="shadow-xl py-4 rounded-xl dark:border dark:border-gray-500"
+                        >
+                            <div className="font-bold dark:text-white text-xl px-8 py-4">
+                                PREVIEW
+                            </div>
+                            <div className="max-h-[50rem] overflow-y-auto no-scrollbar">
+                                <ItemDetails 
+                                    item={{
+                                        ...data,
+                                        image:  { original: imageUrl, name: 'Uploaded Image'},
+                                        tags: collections.filter(collection => data.collections.includes(collection.id))
+                                    }}
+                                    preview={true}
+                                />
+                            </div>
+                        </div>
                     </div>
+                    <Modal show={preview} maxWidth="sm" onClose={() => setPreview(false)}>
+                        <div className="relative dark:bg-black">
+                            <div className="font-bold dark:text-white text-xl px-8 py-4">
+                                PREVIEW
+                            </div>
+                            <button className="absolute top-4 right-8 border border-black p-2 rounded-full dark:border-white dark:fill-white" onClick={() => setPreview(false)}>
+                                <Icon name="close" size="14" />
+                            </button>
+                            <div className="max-h-[30rem] overflow-y-auto no-scrollbar">
+                                <ItemDetails 
+                                    item={{
+                                        ...data,
+                                        image:  { original: imageUrl, name: 'Uploaded Image'},
+                                        tags: collections.filter(collection => data.collections.includes(collection.id))
+                                    }}
+                                    preview={true}
+                                />
+                            </div>
+                        </div>
+                    </Modal>
                 </div>
             </Section>
         </Layout>

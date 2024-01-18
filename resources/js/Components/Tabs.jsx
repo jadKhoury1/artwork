@@ -6,7 +6,7 @@ const Tabs = ({ list, selected = "All" }) => {
     const [tab, setTab] = useState(selected);
 
     return (
-        <div className="flex font-bold mt-1">
+        <div className="flex font-bold mt-1 overflow-x-auto no-scrollbar">
             {list.map(item => (
                 <div key={item}>
                     <div 

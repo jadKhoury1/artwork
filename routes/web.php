@@ -37,11 +37,12 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('items/create', [ItemController::class, 'create'])->name('items.create');
     Route::post('items/create', [ItemController::class, 'store'])->name('items.store');
+    Route::get('items/create', [ItemController::class, 'create'])->name('items.create');
     Route::get('items/search', [ItemController::class, 'index'])
         ->withoutMiddleware('auth')
         ->name('items.search');
+    Route::get('items/{item}', [ItemController::class, 'show'])->name('items.show');
 });
 
 Route::middleware('auth')->group(function () {
