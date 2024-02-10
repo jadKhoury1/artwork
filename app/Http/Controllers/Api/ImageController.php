@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Image;
 use Illuminate\Http\Request;
@@ -20,7 +20,7 @@ class ImageController extends BaseController
     public function upload(Request $request): JsonResponse
     {
         $request->validate([
-            'image' => 'bail|required|file|mimes:jpeg,png,jpg,webp|max:10000'
+            'image' => 'bail|required|file|mimes:jpeg,png,jpg,webp,avif|max:10000'
         ]);
 
         $image = $request->file('image');
@@ -32,9 +32,7 @@ class ImageController extends BaseController
         // Store image info in the database
         $imageRecord = Image::create([
             'name' => $imageName,
-            'original' => $this->getBaseS3Url() . '/original/' . $imageName,
-            'medium' => $this->getBaseS3Url() . '/medium/' . $imageName,
-            'thumbnail' => $this->getBaseS3Url() . '/thumbnail/' . $imageName,
+            'original' => $this->getBaseS3Url() . '/original/' . $imageName
         ]);
 
         return $this->response->statusOk([

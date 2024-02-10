@@ -5,12 +5,12 @@ import ItemDetails from '../../Sections/ItemDetails';
 
 
 
-const Details = ({ data: {item}}) => {
+const Details = ({ data: {item}, items, hotbid}) => {
     return (
         <Layout>
             <ItemDetails item={item}/>
-            <HotBid />
-            <Discover />
+            <HotBid items={hotbid} />
+            <Discover items={items} mode="partial" />
         </Layout>
     );
 };

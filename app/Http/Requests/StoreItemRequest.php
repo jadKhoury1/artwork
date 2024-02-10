@@ -2,8 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Tag;
-use Illuminate\Validation\Rule;
+use App\Rules\CollectionsExist;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreItemRequest extends FormRequest
@@ -27,16 +26,10 @@ class StoreItemRequest extends FormRequest
             'imageId' => ['required', 'integer', 'exists:images,id', 'unique:items,image_id'],
             'title' => ['required', 'string', 'min:3', 'max:100'],
             'description' => ['required', 'string', 'min:10', 'max:500'],
-            'color' => ['required', Rule::in(['any', 'red', 'yellow', 'green', 'blue'])],
+            'color' => ['required', 'string', 'exists:colors,value'],
             'price' => ['bail', 'required', 'numeric','min:1', 'max:999999'],
             'count' => ['bail', 'required', 'integer', 'min:1', 'max:999999'],
-            'collections' => ['required', 'array', function(string $attribute, mixed $value, \Closure $fail) {
-                $count = Tag::where('key', 'collection')->whereIn('id', $value)->count();
-
-                if ($count !== count($value)) {
-                    $fail('The collections are not valid');
-                }
-            }],
+            'collections' => ['required', 'array', new CollectionsExist()],
         ];
     }
 }

@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import Icon from "../Components/Icon";
 import Price from "./Price";
 import PrimaryButton from "./PrimaryButton";
 
 const Card = ({ card }) => {
+    console.log('THIS WAS RENDERED');
     const [isLiked, setIsLiked] = useState(false);
 
     return (
@@ -12,7 +13,7 @@ const Card = ({ card }) => {
                 <div className="border-b border-gray-300 pb-5">
                     <div className={"aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md lg:aspect-none bg-black h-80 relative"}>
                         <div className="invisible absolute top-4 left-4 text-white font-bold z-10 group-hover:visible">
-                            Nice Picture
+                            {card.title}
                         </div>
                         <div 
                             onClick={() => setIsLiked(!isLiked)}
@@ -24,12 +25,12 @@ const Card = ({ card }) => {
                             }
                         </div>
                         <img 
-                            src={card} 
+                            src={card.image.original} 
                             alt="Front of men&#039;s Basic Tee in black." 
                             className="group-hover:opacity-70 h-full w-full object-cover object-center lg:h-full lg:w-full"
                         />
                         <div className="invisible absolute bottom-4 w-full flex group-hover:visible">
-                            <PrimaryButton className="m-auto">Sale</PrimaryButton>
+                            <PrimaryButton className="m-auto">{card.tags[0].value}</PrimaryButton>
                         </div>
                     </div>
                 </div>
@@ -38,13 +39,13 @@ const Card = ({ card }) => {
                         <h3 className="text-base text-gray-700 dark:text-gray-300">
                             <a href="#">
                                 <span aria-hidden="true" className="absolute inset-0"></span>
-                                Basic Tee
+                                {card.title}
                             </a>
                         </h3>
-                        <p className="mt-1 text-sm text-gray-500">19 items</p>
+                        <p className="mt-1 text-sm text-gray-500">{card.count} items</p>
                     </div>
                     <div>
-                        <Price price={35} currency="$" />
+                        <Price price={card.price} currency="$" />
                     </div>
                 </div>
             </div>
@@ -52,4 +53,4 @@ const Card = ({ card }) => {
     );
 };
 
-export default Card;
+export default memo(Card);

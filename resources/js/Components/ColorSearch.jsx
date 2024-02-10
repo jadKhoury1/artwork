@@ -1,10 +1,21 @@
+import { useContext } from 'react';
+import { usePage } from '@inertiajs/react';
+import { SearchContext } from '@/Context/StateContext';
 import DropdownSearch from './DropdownSearch';
 import InputLabel from './InputLabel';
 
 const ColorSearch = ({ withLabel = true, handleChange }) => {
-    const colors = [
-        'Any Color', 'Red', 'Yellow', 'Green', 'Blue'
-    ];
+    const {props:{colors}} = usePage();
+    const {filters, setFilter} = useContext(SearchContext);
+
+    const updateColor = value => {
+        setFilter('color', value);
+
+        // Handle change is not mandatory - it should be trigerred only when it is assigned a function
+        if (typeof handleChange === 'function') {
+            handleChange(value);
+        }
+    }
 
     return (
         <div>
@@ -13,9 +24,9 @@ const ColorSearch = ({ withLabel = true, handleChange }) => {
             </div>}
             <div>
                 <DropdownSearch 
-                    selected="Any Color"
+                    selected={filters.color || 'Any'}
                     list={colors}
-                    handleChange={handleChange}
+                    handleChange={updateColor}
                 />
             </div>
         </div>

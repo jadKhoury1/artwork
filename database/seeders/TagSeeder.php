@@ -15,7 +15,7 @@ class TagSeeder extends Seeder
     {
         $tags = array_map(function($tag) {
             return ['key' => 'collection', 'value' => $tag, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()];
-        }, ['Sale', 'Digital', 'Photography', 'Artwork']);
+        }, ['Cosmos', 'Artwork', 'Digital', 'Sale']);
 
         Tag::insert($tags);
     }

@@ -1,47 +1,37 @@
 
-import { useState } from "react";
-import cn from "classnames";
-import Section from "@/Components/Section";
-import Tabs from "@/Components/Tabs";
-import ColorSearch from "@/Components/ColorSearch";
-import Icon from "@/Components/Icon";
-import PriceRange from "@/Components/PriceRange";
-import Card from "@/Components/Card";
+import { useState } from 'react';
+import { usePage } from '@inertiajs/react';
+import cn from 'classnames';
+import Section from '@/Components/Section';
+import Tabs from '@/Components/Tabs';
+import ColorSearch from '@/Components/ColorSearch';
+import Icon from '@/Components/Icon';
+import PriceRange from '@/Components/PriceRange';
+import Card from '@/Components/Card';
 
-const cards = [
-    'https://cosmic-nextjs-marketplace.vercel.app/_next/image?url=https%3A%2F%2Fimgix.cosmicjs.com%2F4909e910-fa1b-11ec-b2b1-473235369c53-fuu-j-emWddF4NrLo-unsplash-1.jpg&w=3840&q=60',
-    'https://cosmic-nextjs-marketplace.vercel.app/_next/image?url=https%3A%2F%2Fimgix.cosmicjs.com%2F461dc5a0-fa1b-11ec-b2b1-473235369c53-fuu-j-Lo7venJywM-unsplash.jpg&w=3840&q=60',
-    'https://cosmic-nextjs-marketplace.vercel.app/_next/image?url=https%3A%2F%2Fimgix.cosmicjs.com%2F4e23c1f0-fa1b-11ec-b2b1-473235369c53-philipp-potocnik-5rsNohd8bY8-unsplash.jpg&w=3840&q=60',
-    'https://cosmic-nextjs-marketplace.vercel.app/_next/image?url=https%3A%2F%2Fimgix.cosmicjs.com%2F41ebb4b0-fa1b-11ec-b2b1-473235369c53-selection-pic-12x.jpg&w=3840&q=60',
-    'https://cosmic-nextjs-marketplace.vercel.app/_next/image?url=https%3A%2F%2Fimgix.cosmicjs.com%2F4ebf3ea0-fa1b-11ec-b2b1-473235369c53-cash-uJAIZP-J5Tg-unsplash.jpg&w=3840&q=60',
-    'https://cosmic-nextjs-marketplace.vercel.app/_next/image?url=https%3A%2F%2Fimgix.cosmicjs.com%2F4baa8490-fa1b-11ec-b2b1-473235369c53-nick-brunner-LXspKUjsgH0-unsplash.jpg&w=3840&q=60',
-    'https://cosmic-nextjs-marketplace.vercel.app/_next/image?url=https%3A%2F%2Fimgix.cosmicjs.com%2Fca1a62a0-fa2a-11ec-b458-99bc1b8dd3ef-alex-sh-pGss3gTt5Mk-unsplash.jpg&w=3840&q=60',
-    'https://cosmic-nextjs-marketplace.vercel.app/_next/image?url=https%3A%2F%2Fimgix.cosmicjs.com%2Fc773fac0-fa2a-11ec-b458-99bc1b8dd3ef-endroit-secret-vGipWHwGm4o-unsplash.jpg&w=3840&q=60'
-
-];
-
-const Discover = () => {
-
+const Discover = ({ items }) => {
+    const {props: {collections}} = usePage();
     const [moreFilters, setMoreFilters] = useState(false);
 
     return (
+
         <Section 
-            title="Discover" 
-            subTitle="Create, explore, &amp; collect digital art" 
-            button="Start Search"
+            title={"Discover"} 
+            subTitle={"Create, explore, &amp; collect digital art"}
+            button={"Start Search"}
             buttonHref="items.search"
             className="py-10"
         >
             <div>
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
                     <div className="hidden lg:block">
-                        <ColorSearch withLabel={false} handleChange={() => '' }/>
+                        <ColorSearch  withLabel={false} />
                     </div>
                     <div className="lg:col-span-2">
-                        <Tabs list={['Sale', 'Special Offer', 'Cosmos', 'Artwork']} selected="Sale"/>
+                        <Tabs list={collections.map(collection => collection.value)} selected={collections[0].value}/>
                     </div>
                     <div className="block lg:hidden">
-                        <ColorSearch withLabel={false} handleChange={() => '' }/>
+                        <ColorSearch withLabel={false} />
                     </div>
                     <div className="lg:justify-self-center">
                         <button
@@ -67,7 +57,7 @@ const Discover = () => {
                     </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-10">
-                    { cards.map((card, index) => <Card card={card} key={index}/>) }
+                    { items.map((item, index) => <Card card={item} key={index}/>) }
                 </div>
             </div>
         </Section>

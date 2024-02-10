@@ -1,9 +1,8 @@
 <?php
 
-use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -18,15 +17,7 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-        'logoUrl' => storage_path('app/public/image/logo.avif')
-    ]);
-})->name('welcome');
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 Route::get('/about', function () {
     return Inertia::render('About');
@@ -36,14 +27,14 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
 Route::middleware('auth')->group(function () {
     Route::post('items/create', [ItemController::class, 'store'])->name('items.store');
     Route::get('items/create', [ItemController::class, 'create'])->name('items.create');
-    Route::get('items/search', [ItemController::class, 'index'])
-        ->withoutMiddleware('auth')
-        ->name('items.search');
-    Route::get('items/{item}', [ItemController::class, 'show'])->name('items.show');
 });
+
+Route::get('items/search', [ItemController::class, 'index'])->name('items.search');
+Route::get('items/{item}', [ItemController::class, 'show'])->name('items.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -11,7 +11,7 @@ export default () => {
         if (!value instanceof File) {
             return false;
         }
-        return value[0].type.match(/^image\/(jpg|jpeg|png|webp)$/)
+        return value[0].type.match(/^image\/(jpg|jpeg|png|webp|avif)$/)
     });
 
     // Register a rule that validates the max size of a file in MB
