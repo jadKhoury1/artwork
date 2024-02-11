@@ -4,7 +4,6 @@ import Price from "./Price";
 import PrimaryButton from "./PrimaryButton";
 
 const Card = ({ card }) => {
-    console.log('THIS WAS RENDERED');
     const [isLiked, setIsLiked] = useState(false);
 
     return (
