@@ -2,12 +2,22 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\ColorCollection;
+use App\Http\Resources\TagResource;
+use App\Repositories\ColorRepository;
+use App\Repositories\TagRepository;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
 {
+
+    public function __construct(
+        private ColorRepository $colorRepository,
+        private TagRepository $tagRepository,
+    ){}
+
     /**
      * The root template that is loaded on the first page visit.
      *
@@ -30,6 +40,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+
         return [
             ...parent::share($request),
             'auth' => [
@@ -39,6 +50,8 @@ class HandleInertiaRequests extends Middleware
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
+            'colors'      => new ColorCollection($this->colorRepository->all()),
+            'collections' => TagResource::collection($this->tagRepository->getCollections()),
         ];
     }
 }

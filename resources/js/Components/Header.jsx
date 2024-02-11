@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Link, usePage } from '@inertiajs/react';
-import cn from "classnames";
-import NavLink from "./NavLink";
-import Icon from "./Icon";
-import Theme from "./Theme";
-import User from "./User";
-import MobileNavLink from "./MobileNavLink";
+import cn from 'classnames';
+import NavLink from './NavLink';
+import Icon from './Icon';
+import Theme from './Theme';
+import User from './User';
+import MobileNavLink from './MobileNavLink';
 
 
 const Header = () => {

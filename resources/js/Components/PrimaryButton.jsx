@@ -1,4 +1,4 @@
-import cn from "classnames";
+import cn from 'classnames';
 
 export default function PrimaryButton({ className = '', disabled, children, ...props }) {
     return (

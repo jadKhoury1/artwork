@@ -1,10 +1,10 @@
-import { Link } from "@inertiajs/react";
-import { useContext } from "react";
-import cs from "classnames";
-import NavLink from "./NavLink";
-import Theme from "./Theme";
-import SocialMedia from "./SocialMedia";
-import { ThemeContext } from "@/Context/StateContext";
+import { Link } from '@inertiajs/react';
+import { useContext } from 'react';
+import cs from 'classnames';
+import NavLink from './NavLink';
+import Theme from './Theme';
+import SocialMedia from './SocialMedia';
+import { ThemeContext } from '@/Context/StateContext';
 
 const Footer = () => {
     const { theme } = useContext(ThemeContext);

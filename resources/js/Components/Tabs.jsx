@@ -1,16 +1,18 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import cn from "classnames";
 
-const Tabs = ({ list, selected = "All" }) => {
-
+const Tabs = ({ list, onChange, selected = "All"}) => {  
     const [tab, setTab] = useState(selected);
 
     return (
-        <div className="flex font-bold mt-1">
+        <div className="flex font-bold mt-1 overflow-x-auto no-scrollbar">
             {list.map(item => (
                 <div key={item}>
                     <div 
-                        onClick={() => setTab(item)}
+                        onClick={() => {
+                            setTab(item);
+                            onChange(item);
+                        }}
                         className={cn(
                             {"text-white bg-gray-700 hover:bg-black dark:text-gray-700 dark:hover:text-black dark:bg-white": tab === item},
                             {"text-gray-500 dark:text-gray-300 dark:hover:text-gray-500 hover:text-gray-700": tab !== item},
@@ -25,4 +27,4 @@ const Tabs = ({ list, selected = "All" }) => {
     );
 };
  
-export default Tabs;
+export default memo(Tabs);
