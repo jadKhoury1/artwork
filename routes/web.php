@@ -29,12 +29,12 @@ Route::get('/dashboard', function () {
 
 
 Route::middleware('auth')->group(function () {
-    Route::post('items/create', [ItemController::class, 'store'])->name('items.store');
-    Route::get('items/create', [ItemController::class, 'create'])->name('items.create');
+    Route::post('/items/create', [ItemController::class, 'store'])->name('items.store');
+    Route::get('/items/create', [ItemController::class, 'create'])->name('items.create');
 });
 
-Route::get('items/search', [ItemController::class, 'index'])->name('items.search');
-Route::get('items/{item}', [ItemController::class, 'show'])->name('items.show');
+Route::get('/items/search', [ItemController::class, 'index'])->name('items.search');
+Route::get('/items/{item}', [ItemController::class, 'show'])->name('items.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

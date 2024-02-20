@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { usePage, router } from '@inertiajs/react';
 import isEqual from 'lodash.isequal';
 import { SearchContext } from '@/Context/StateContext';
@@ -8,7 +8,8 @@ import Card from '@/Components/Card';
 import Filters from '@/Components/Filters';
 import Tabs from '@/Components/Tabs';
 import Section from '@/Components/Section';
-import PrimaryButton from '../../Components/PrimaryButton';
+import PrimaryButton from '@/Components/PrimaryButton';
+import Paginator from '@/Components/Paginator';
 
 const Search = ({ items }) => {
     const {props: { collections  }} = usePage();
@@ -24,12 +25,11 @@ const Search = ({ items }) => {
         redirect();
     };
 
-    useEffect(() => {  
-        // Trigger automatic search, only for colors or collection filters
-        if (updatedFilter === 'color' || updatedFilter === 'collection') {
+    useEffect(() => {
+        if (updatedFilter === 'color' || updatedFilter === 'collection' || updatedFilter === 'page') {
             redirect();
         }
-    }, [filters]);
+    }, [filters])
 
     return (
         <Layout>
@@ -59,7 +59,16 @@ const Search = ({ items }) => {
                                     />
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                                    { items.map((item, index) => <Card card={item} key={index}/>) }
+                                    { items.data.map((item, index) => <Card card={item} key={index}/>) }
+                                </div>
+                                <div className="mt-10 ">
+                                    {   items.meta.last_page !== 1 ? 
+                                        <Paginator 
+                                            currentPage={items.meta.current_page}
+                                            lastPage={items.meta.last_page}
+                                            onChange={page => setFilter('page', page)}
+                                        /> : null
+                                    }
                                 </div>
                             </div>
                         </div>

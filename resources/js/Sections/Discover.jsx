@@ -1,25 +1,36 @@
 
-import { useState } from 'react';
-import { usePage } from '@inertiajs/react';
+import { useState, useContext, useEffect } from 'react';
 import cn from 'classnames';
+import { usePage, Link } from '@inertiajs/react';
+import { searchItems } from '../Services';
+import { SearchContext } from '@/Context/StateContext';
 import Section from '@/Components/Section';
 import Tabs from '@/Components/Tabs';
 import ColorSearch from '@/Components/ColorSearch';
 import Icon from '@/Components/Icon';
 import PriceRange from '@/Components/PriceRange';
 import Card from '@/Components/Card';
+import PrimaryButton from '@/Components/PrimaryButton';
+import SecondaryButton from '@/Components/SecondaryButton';
 
-const Discover = ({ items }) => {
+const Discover = ({ items: initialItems, hasMore = false }) => {
     const {props: {collections}} = usePage();
+    const [items, setItems] = useState(initialItems);
+    const { filters, updatedFilter, setFilter } = useContext(SearchContext);
     const [moreFilters, setMoreFilters] = useState(false);
 
-    return (
+    useEffect(() => {
+        if (updatedFilter) {
+            searchItems(filters).then(({data}) => setItems(data.response.items));
+        }
+    }, [filters]);
 
+    return (
         <Section 
-            title={"Discover"} 
-            subTitle={"Create, explore, &amp; collect digital art"}
-            button={"Start Search"}
-            buttonHref="items.search"
+            title="Discover" 
+            subTitle="Create, explore, &amp; collect digital art"
+            button="Start Search"
+            buttonHref={route("items.search", filters)}
             className="py-10"
         >
             <div>
@@ -28,7 +39,11 @@ const Discover = ({ items }) => {
                         <ColorSearch  withLabel={false} />
                     </div>
                     <div className="lg:col-span-2">
-                        <Tabs list={collections.map(collection => collection.value)} selected={collections[0].value}/>
+                        <Tabs 
+                            list={collections.map(collection => collection.value)} 
+                            selected={filters.collection}
+                            onChange={value => setFilter('collection', value)}
+                        />
                     </div>
                     <div className="block lg:hidden">
                         <ColorSearch withLabel={false} />
@@ -57,7 +72,19 @@ const Discover = ({ items }) => {
                     </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-10">
-                    { items.map((item, index) => <Card card={item} key={index}/>) }
+                    { items.data.map((item, index) => <Card card={item} key={index}/>) }
+                </div>
+                <div className="flex justify-center">
+                    { items.links.next ? <div className="group">
+                        <Link href={route("items.search", {...filters, page: 2})}>
+                            <PrimaryButton className="group-hover:hidden">
+                                More
+                            </PrimaryButton>
+                            <SecondaryButton className="hidden group-hover:block">
+                                More
+                            </SecondaryButton>
+                        </Link> 
+                    </div> : null }
                 </div>
             </div>
         </Section>
