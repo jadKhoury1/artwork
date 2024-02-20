@@ -13,7 +13,7 @@ import Card from '@/Components/Card';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
 
-const Discover = ({ items: initialItems, hasMore = false }) => {
+const Discover = ({ items: initialItems }) => {
     const {props: {collections}} = usePage();
     const [items, setItems] = useState(initialItems);
     const { filters, updatedFilter, setFilter } = useContext(SearchContext);
