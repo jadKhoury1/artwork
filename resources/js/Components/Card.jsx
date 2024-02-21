@@ -1,11 +1,13 @@
-import { useState, memo } from "react";
-import Icon from "../Components/Icon";
-import Price from "./Price";
-import PrimaryButton from "./PrimaryButton";
+import { useState, memo } from 'react';
+import { Link, router } from '@inertiajs/react'
+import Icon from '../Components/Icon';
+import Price from './Price';
+import PrimaryButton from './PrimaryButton';
 
 const Card = ({ card }) => {
     const [isLiked, setIsLiked] = useState(false);
-
+    const itemlink = route('items.show', {item: card.id});
+    
     return (
         <div>
             <div className="group relative my-5">
@@ -23,23 +25,27 @@ const Card = ({ card }) => {
                                 <Icon name="heart" size="20" className="fill-gray-500 hover:fill-black" /> 
                             }
                         </div>
-                        <img 
-                            src={card.image.original} 
-                            alt="Front of men&#039;s Basic Tee in black." 
-                            className="group-hover:opacity-70 h-full w-full object-cover object-center lg:h-full lg:w-full"
-                        />
-                        <div className="invisible absolute bottom-4 w-full flex group-hover:visible">
-                            <PrimaryButton className="m-auto">{card.tags[0].value}</PrimaryButton>
-                        </div>
+                        <Link href={itemlink}>
+                            <div className="h-full">
+                                <img 
+                                    src={card.image.original} 
+                                    alt="Front of men&#039;s Basic Tee in black." 
+                                    className="group-hover:opacity-70 h-full w-full object-cover object-center lg:h-full lg:w-full"
+                                />
+                                <div className="invisible absolute bottom-4 w-full flex group-hover:visible">
+                                    <PrimaryButton className="m-auto">{card.tags[0].value}</PrimaryButton>
+                                </div>
+                            </div>
+                        </Link>
                     </div>
                 </div>
                 <div className="mt-4 font-bold flex justify-between">
                     <div>
                         <h3 className="text-base text-gray-700 dark:text-gray-300">
-                            <a href="#">
+                            <Link href={itemlink}>
                                 <span aria-hidden="true" className="absolute inset-0"></span>
                                 {card.title}
-                            </a>
+                            </Link>
                         </h3>
                         <p className="mt-1 text-sm text-gray-500">{card.count} items</p>
                     </div>
