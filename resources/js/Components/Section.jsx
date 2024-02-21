@@ -1,4 +1,4 @@
-import { Link, router } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import cn from 'classnames';
 import PrimaryButton from './PrimaryButton';
 import SecondaryButton from "./SecondaryButton";
@@ -20,10 +20,10 @@ const Section = ({title, subTitle, button, buttonHref = 'welcome', grayBg, class
                         { button && 
                             <div className="w-full lg:w-3/5 my-3 flex justify-center">
                                 <div className="group w-full lg:w-auto">
-                                    <Link href={route(buttonHref)}>
+                                    <Link href={buttonHref}>
                                         <SecondaryButton className="hidden w-full lg:w-auto group-hover:block font-bold text-md">{button}</SecondaryButton>
                                     </Link>
-                                    <Link href={route(buttonHref)}>
+                                    <Link href={buttonHref}>
                                         <PrimaryButton className="w-full lg:w-auto  group-hover:hidden font-bold text-md">{button}</PrimaryButton>
                                     </Link>
                                 </div>

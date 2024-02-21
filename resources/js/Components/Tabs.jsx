@@ -1,4 +1,4 @@
-import { useState, memo } from 'react';
+import { useState } from 'react';
 import cn from "classnames";
 
 const Tabs = ({ list, onChange, selected = "All"}) => {  
@@ -27,4 +27,4 @@ const Tabs = ({ list, onChange, selected = "All"}) => {
     );
 };
  
-export default memo(Tabs);
+export default Tabs;

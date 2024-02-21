@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, usePage } from '@inertiajs/react'
 import { make } from 'simple-body-validator';
 import { FiTrash2 } from 'react-icons/fi';
@@ -11,7 +11,7 @@ import ColorSearch from '@/Components/ColorSearch';
 import CollectionCard from './Partials/CollectionCard';
 import ImageUpload from './Partials/ImageUpload';
 import PrimaryButton from '@/Components/PrimaryButton';
-import ItemDetails from '../../Sections/ItemDetails';
+import ItemDetails from '@/Sections/ItemDetails';
 import Modal from '@/Components/Modal';
 import SecondaryButton from '@/Components/SecondaryButton';
 import Icon from '@/Components/Icon';

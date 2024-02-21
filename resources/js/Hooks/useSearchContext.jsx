@@ -4,7 +4,7 @@ import { SearchContext } from '@/Context/StateContext';
 
 
 const useSearchContext = () => {
-    const Provider = ({ children,  initialFilters = {} }) => {
+    const Provider = ({ children,  initialFilters = {}, withDebounce = false }) => {
         const [filters, setAllFilters] = useState(initialFilters);
         const [updatedFilter, setUpdatedFilter] = useState('');
 
@@ -34,7 +34,7 @@ const useSearchContext = () => {
          * @param {string|number|null} value 
          */
         const setStandardFilter = (key, value) => {
-            // When value is null - filter should be removed
+            // When value is empty string - filter should be removed
             if (value === '') {
                 setAllFilters(omit(filters, key));
             } else {
@@ -68,7 +68,7 @@ const useSearchContext = () => {
         };
 
         return (
-            <SearchContext.Provider value={{filters, initialFilters, updatedFilter, setAllFilters, setFilter}}>
+            <SearchContext.Provider value={{filters, initialFilters, updatedFilter, setAllFilters, setFilter, withDebounce}}>
                 {children}
             </SearchContext.Provider>
         )

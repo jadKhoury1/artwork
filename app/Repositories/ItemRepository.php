@@ -2,12 +2,13 @@
 
 namespace App\Repositories;
 
-use App\Models\Color;
-use App\Models\Item;
 use App\Models\Tag;
+use App\Models\Item;
+use App\Models\Color;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Contracts\Pagination\Paginator;
 
 class ItemRepository
 {
@@ -71,12 +72,12 @@ class ItemRepository
     /**
      * Get Items that are related to the first collection
      *
-     * @return Collection
+     * @return Paginator
      */
-    public function getItemsByFirstCollection(): Collection
+    public function getItemsByFirstCollection(): Paginator
     {
         $firstCollection = Tag::where('key', 'collection')->orderBy('id')->first();
-        return $this->searchItems(['collection' => $firstCollection->value])->get();
+        return $this->searchItems(['collection' => $firstCollection->value])->simplePaginate(8);
     }
 
     /**
