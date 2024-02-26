@@ -24,7 +24,7 @@ class ItemController extends Controller
             'collection', 'keyword', 'min_price', 'max_price', 'color'
         ]);
 
-        $items = $this->itemRepository->searchItems($filters)->paginate(8);
+        $items = $this->itemRepository->getPaginated($filters, $request->input('page', 1));
         return Inertia::render('Items/Search', [
             'items'   => ItemResource::collection($items),
             'filters' => $filters

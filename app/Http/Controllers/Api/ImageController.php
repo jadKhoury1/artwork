@@ -20,7 +20,7 @@ class ImageController extends BaseController
     public function upload(Request $request): JsonResponse
     {
         $request->validate([
-            'image' => 'bail|required|file|mimes:jpeg,png,jpg,webp,avif|max:10000'
+            'image' => 'bail|required|file|mimes:jpeg,png,jpg,webp,avif|max:5000'
         ]);
 
         $image = $request->file('image');

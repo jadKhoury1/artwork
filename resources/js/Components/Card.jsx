@@ -12,7 +12,7 @@ const Card = ({ card }) => {
         <div>
             <div className="group relative my-5">
                 <div className="border-b border-gray-300 pb-5">
-                    <div className={"aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md lg:aspect-none bg-black h-80 relative"}>
+                    <div className={"aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md lg:aspect-none bg-black h-96 sm:h-80 relative"}>
                         <div className="invisible absolute top-4 left-4 text-white font-bold z-10 group-hover:visible">
                             {card.title}
                         </div>

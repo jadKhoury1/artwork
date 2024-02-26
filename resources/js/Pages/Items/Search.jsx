@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { usePage, router } from '@inertiajs/react';
 import isEqual from 'lodash.isequal';
 import { SearchContext } from '@/Context/StateContext';
@@ -14,8 +14,18 @@ import Paginator from '@/Components/Paginator';
 const Search = ({ items }) => {
     const {props: { collections  }} = usePage();
     const {filters, setFilter, initialFilters, updatedFilter} = useContext(SearchContext);
+    const searchRef = useRef(null);
 
-    const redirect = () => router.visit(route('items.search', filters));
+    const redirect = () => router.visit(
+        route('items.search', filters), 
+        {
+            onFinish: () => {
+                if (window.matchMedia('(max-width: 1023px)').matches) {
+                    searchRef.current.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        }
+    );
 
     const search = () => {
         // Do not trigger the search request if filters did not change
@@ -43,14 +53,14 @@ const Search = ({ items }) => {
                                         Search
                                     </div>
                                     <Filters />
-                                    <div className="mt-10">
+                                    <div className="mt-10" ref={searchRef}>
                                         <PrimaryButton className="w-full" onClick={search}>
                                             Search
                                         </PrimaryButton>
                                     </div>
                                 </div>
                             </div>
-                            <div className="lg:col-span-2">
+                            <div className="lg:col-span-2" id="items">
                                 <div className="my-5 lg:my-0">
                                     <Tabs 
                                         onChange={value => setFilter('collection', value)}

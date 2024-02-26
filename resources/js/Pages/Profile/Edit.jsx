@@ -9,7 +9,7 @@ export default function Edit({ mustVerifyEmail, status }) {
         <Layout hasFooter={false}>
             <Head title="Profile" />
 
-            <div className="mb-24">
+            <div className="pb-24">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                     <div className="p-4 sm:p-8 bg-white dark:bg-slate-800 shadow sm:rounded-lg">
                         <UpdateProfileInformationForm

@@ -33,11 +33,26 @@ class ItemRepository
 
         $item = Item::create($itemData);
         $item->tags()->sync($data['collections']);
-        if ($data['color'] !== 'Any') {
-            $color_id = Color::where('value', $data['color'])->first()->id;
-            $item->colors()->sync([$color_id]);
-        }
+        $this->syncColor($item, $data['color']);
+        Cache::flush();
         return $item;
+    }
+
+    /**
+     * Sync Item color, only when color value is different from 'Any'
+     *
+     * @param Item $item
+     * @param string $color
+     * @return void
+     */
+    private function syncColor(Item $item, string $color): void
+    {
+        if ($color === 'Any') {
+            return;
+        }
+
+        $color_id = Color::where('value', $color)->first()->id;
+        $item->colors()->sync([$color_id]);
     }
 
     /**
@@ -70,6 +85,59 @@ class ItemRepository
     }
 
     /**
+     * Search, paginate, and fetch data either from the database ot from cache based on specific criteria
+     *
+     * @param array $filters
+     * @param int $page
+     * @param int $perPage
+     * @return Paginator
+     */
+    public function getPaginated(array $filters, int $page = 1, int $perPage = 8): Paginator
+    {
+        $shouldCache = $this->shouldCache($filters, $page);
+
+        if (!$shouldCache) {
+            return $this->searchItems($filters)->orderByDesc('id')->paginate($perPage);
+        }
+
+        // Try to fetch the items from cache, otherwise store the items in cache for a duration of one day
+        return Cache::remember(
+            !isset($filters['collection']) ? 'items_all' : "items_{$filters['collection']}",
+            now()->addDay(),
+            function () use($filters, $perPage) {
+                return $this->searchItems($filters)->orderByDesc('id')->paginate($perPage);
+            }
+        );
+    }
+
+    /**
+     * Check whether the items should be fetched from cached based on specific criteria
+     *
+     * @param array $filters
+     * @param int $page
+     * @return bool
+     */
+    private function shouldCache(array $filters, int $page = 0): bool
+    {
+        // We only cache the data of the first page
+        if ($page > 1) {
+            return false;
+        }
+
+        // If the number of filters is greater than one - no need to check the cache
+        if (count($filters) > 1) {
+            return  false;
+        }
+
+        // We only check the cache when we filter by collection
+        if (count($filters) === 1 && !isset($filters['collection'])) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Get Items that are related to the first collection
      *
      * @return Paginator
@@ -77,7 +145,7 @@ class ItemRepository
     public function getItemsByFirstCollection(): Paginator
     {
         $firstCollection = Tag::where('key', 'collection')->orderBy('id')->first();
-        return $this->searchItems(['collection' => $firstCollection->value])->simplePaginate(8);
+        return $this->getPaginated(['collection' => $firstCollection->value]);
     }
 
     /**
@@ -88,7 +156,7 @@ class ItemRepository
     public function getLatestSalesItems(): Collection
     {
         return Cache::remember('latest_sales_items', now()->addDay(), function () {
-            return  $this->searchItems(['collection' => 'Sale'])->limit(10)->get();
+            return  $this->searchItems(['collection' => 'Sale'])->orderByDesc('id')->limit(10)->get();
         });
     }
 }

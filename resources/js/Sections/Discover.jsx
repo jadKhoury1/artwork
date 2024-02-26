@@ -76,7 +76,7 @@ const Discover = ({ items: initialItems }) => {
                 </div>
                 <div className="flex justify-center">
                     { items.links.next ? <div className="group">
-                        <Link href={route("items.search", {...filters, page: 2})}>
+                        <Link href={`${route("items.search", {...filters, page: 2})}#items`}>
                             <PrimaryButton className="group-hover:hidden">
                                 More
                             </PrimaryButton>

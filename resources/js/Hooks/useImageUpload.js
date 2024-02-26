@@ -27,7 +27,7 @@ const useImageUpload = (onImageUpload, onError) => {
     // https://www.simple-body-validator.com/available-validation-rules
     const validator = make()
         .setRules({
-            image: ['bail', 'required_without:image.id', 'image', 'max_file_size:10'],
+            image: ['bail', 'required_without:image.id', 'image', 'max_file_size:5'],
         })
         .setCustomMessages({
             'image.required_without': 'The image field is required'
@@ -66,7 +66,7 @@ const useImageUpload = (onImageUpload, onError) => {
             })
             .catch(e => {
                 // Set errors returned from server if any
-                onError(e.response.data.errors);
+                onError(e.response.status === 422 ? e.response.data.errors.image : 'An Error has occured while uploading the image');
             })
             .finally(() => setProcessing(false));
     };

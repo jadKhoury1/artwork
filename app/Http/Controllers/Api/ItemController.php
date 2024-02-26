@@ -18,7 +18,7 @@ class ItemController extends BaseController
             'collection', 'keyword', 'min_price', 'max_price', 'color'
         ]);
 
-        $items = $itemRepository->searchItems($filters)->simplePaginate(8);;
+        $items = $itemRepository->getPaginated($filters, $request->input('page', 1));
         return $this->response->statusOk([
             'items' => [
                 'data'  => ItemResource::collection($items),
