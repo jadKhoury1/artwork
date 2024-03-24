@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Vapor from 'laravel-vapor';
 import { Link, usePage } from '@inertiajs/react';
 import cn from 'classnames';
 import NavLink from './NavLink';
@@ -10,7 +11,6 @@ import MobileNavLink from './MobileNavLink';
 
 const Header = () => {
     const {props: {auth}} = usePage();
-
     const [isVisibleMenu, setVisibleMenu] = useState(false);
 
     return (
@@ -61,7 +61,7 @@ const Header = () => {
                                     <img 
                                         className="block h-14 pr-5 w-auto fill-current md:border-r md:border-gray-500 md:border-solid"
                                         alt="Logo"
-                                        src="/images/logo.avif"
+                                        src={Vapor.asset('images/logo.avif')}
                                     />
                                 </Link>
                             </div>

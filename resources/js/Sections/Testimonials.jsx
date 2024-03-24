@@ -1,5 +1,5 @@
-import Section from "@/Components/Section";
-import TestimonialCard from "@/Components/TestimonialCard";
+import Section from '@/Components/Section';
+import TestimonialCard from '@/Components/TestimonialCard';
 
 
 const testimonialsList = [

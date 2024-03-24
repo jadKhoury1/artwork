@@ -1,6 +1,7 @@
-import PrimaryButton from "@/Components/PrimaryButton";
-import SecondaryButton from "@/Components/SecondaryButton";
-import { Link, } from "@inertiajs/react";
+import { Link } from '@inertiajs/react';
+import PrimaryButton from '@/Components/PrimaryButton';
+import SecondaryButton from '@/Components/SecondaryButton';
+
 
 const Description = () => {
     return (
