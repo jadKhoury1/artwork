@@ -1,10 +1,10 @@
 import { useRef, useContext } from 'react';
+import { useForm } from '@inertiajs/react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
 import TextInput from '@/Components/TextInput';
-import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 import { ThemeContext } from '@/Context/StateContext';
 
