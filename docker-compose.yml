@@ -1,21 +1,12 @@
 services:
-    laravel.test:
+    fpm:
         build:
-            context: ./vendor/laravel/sail/runtimes/8.2
+            context: .
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
-        image: sail-8.2/app
-        extra_hosts:
-            - 'host.docker.internal:host-gateway'
-        ports:
-            - '${APP_PORT:-80}:80'
-            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+        image: digital-artwork-api
         environment:
-            WWWUSER: '${WWWUSER}'
-            LARAVEL_SAIL: 1
-            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
-            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
             IGNITION_LOCAL_SITES_PATH: '${PWD}'
         volumes:
             - '.:/var/www/html'
@@ -23,10 +14,24 @@ services:
             - sail
         depends_on:
             - pgsql
+    web:
+        image: digital-artwork-web
+        container_name: nginx
+        ports:
+            - "80:80"
+        volumes:
+            - ./:/var/www/html
+            - ./storage:/var/www/html/storage
+        networks:
+            - sail
+        depends_on:
+            - fpm
+        environment:
+            - APP_ENV=local
     pgsql:
         image: 'postgres:15'
         ports:
-            - '${FORWARD_DB_PORT:-5432}:5432'
+            - '5432:5432'
         environment:
             PGPASSWORD: '${DB_PASSWORD:-secret}'
             POSTGRES_DB: '${DB_DATABASE}'
