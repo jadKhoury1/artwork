@@ -1,4 +1,3 @@
-import Vapor from 'laravel-vapor';
 import { Link } from '@inertiajs/react';
 import Section from '@/Components/Section';
 import Layout from '@/Layouts/Layout';
