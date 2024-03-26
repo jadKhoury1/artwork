@@ -37,6 +37,8 @@ return new class extends Migration
             $table->integer('count');
             $table->softDeletes();
             $table->timestamps();
+
+            $table->index(['price']);
         });
     }
 
