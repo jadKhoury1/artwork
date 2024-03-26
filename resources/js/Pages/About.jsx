@@ -11,7 +11,7 @@ const About = () => {
                 <div className="flex flex-col items-center">
                     <div  className="w-4/6 md:w-3/6 lg:w-1/3 h-96 overflow-hidden">
                         <img 
-                            src={Vapor.asset('images/open-gates.avif')}
+                            src="https://digital-artwork.s3.eu-west-1.amazonaws.com/original/open-gates.avif"
                         />
                     </div>
                     <h2 className="dark:text-white text-5xl font-bold mt-10">

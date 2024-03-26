@@ -5,8 +5,6 @@ import HotBid from '@/Sections/HotBid';
 import Discover from '@/Sections/Discover';
 import ItemDetails from '@/Sections/ItemDetails';
 
-
-
 const Details = ({ data: {item}, items, hotbid}) => {
     const {props: {collections}} = usePage();
     const {Provider} = useSearchContext();

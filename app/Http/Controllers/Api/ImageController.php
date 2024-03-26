@@ -22,11 +22,11 @@ class ImageController extends BaseController
     public function upload(Request $request): JsonResponse
     {
         $request->validate([
-            'image' => 'bail|required|file|max:5000'
+            'image' => 'bail|required|file|mimes:jpeg,png,jpg,webp,avif|max:5000'
         ]);
 
         $image = $request->file('image');
-        $imageName = $image->getClientOriginalName();
+        $imageName = date('mdYHis') . '-'. uniqid()  . '-' . $image->getClientOriginalName();
 
         // Store image in S3
         Log::debug('STORING IMAGE IN S3');
