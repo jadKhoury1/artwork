@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helper;
 use App\Jobs\ImageResize;
 use App\Models\Image;
 use Illuminate\Http\Request;
@@ -36,11 +37,11 @@ class ImageController extends BaseController
         Log::debug('CREATING IMAGE RECORD');
         $imageRecord = Image::create([
             'name' => $imageName,
-            'original' => get_base_s3_url() . '/original/' . $imageName
+            'original' => Helper::GetBaseS3Url() . '/original/' . $imageName
         ]);
 
         Log::debug('DISPATCHING IMAGE RESIZE JOB');
-        ImageResize::dispatch($imageRecord)->onQueue('images');
+        ImageResize::dispatch($imageRecord);
 
         return $this->response->statusOk([
             'id' => $imageRecord->id,

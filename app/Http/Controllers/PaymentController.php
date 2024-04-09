@@ -29,7 +29,7 @@ class PaymentController extends Controller
                         'currency' => 'usd',
                         'product_data' => [
                             'name'   => $item->title,
-                            'images' => [$item->image->original]
+                            'images' => [$item->image->thumbnail ?? $item->image->original]
                         ],
                         'unit_amount' => $item->price * 100
                     ],

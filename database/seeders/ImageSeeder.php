@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Helper;
 use Carbon\Carbon;
 use App\Models\Image;
 use Illuminate\Support\Arr;
@@ -23,9 +24,9 @@ class ImageSeeder extends Seeder
         $imageRecords = Arr::map($images, function (string $image_name) {
             return [
                 'name'       => $image_name,
-                'original'   => get_base_s3_url() . '/original/' . $image_name . '.avif',
-                'medium'     => get_base_s3_url() . '/medium/' . $image_name . '.avif',
-                'thumbnail'  => get_base_s3_url() . '/thumbnail/' . $image_name . '.avif',
+                'original'   => Helper::GetBaseS3Url(). '/original/' . $image_name . '.avif',
+                'medium'     => Helper::GetBaseS3Url() . '/medium/' . $image_name . '.avif',
+                'thumbnail'  => Helper::GetBaseS3Url() . '/thumbnail/' . $image_name . '.avif',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ];

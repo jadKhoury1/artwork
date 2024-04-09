@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Helper;
 use App\Models\Image;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -51,8 +52,8 @@ class ImageResize implements ShouldQueue
 
         Log::debug('STORING SCALED DOWN IMAGES IN DB');
         $this->image->update([
-            'medium' => get_base_s3_url() . '/medium/' . $this->image->name,
-            'thumbnail' => get_base_s3_url() , '/thumbnail/' . $this->image->name
+            'medium' => Helper::GetBaseS3Url() . '/medium/' . $this->image->name,
+            'thumbnail' => Helper::GetBaseS3Url() , '/thumbnail/' . $this->image->name
         ]);
     }
 }

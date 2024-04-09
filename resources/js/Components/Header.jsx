@@ -97,7 +97,7 @@ const Header = () => {
                                 </NavLink>
                             </div>
                             <div className="flex items-center ml-3 md:ml-7">
-                                { auth.user ? <User /> : 
+                                { auth.user ? <div className="hidden md:block"> <User /> </div>: 
                                     <Link
                                         href={route('login')}
                                         className={cn(
@@ -119,6 +119,15 @@ const Header = () => {
                         <MobileNavLink href={route('items.create')} active={route().current('items.create')}>Create Item</MobileNavLink>
                         <MobileNavLink href={route('about')} active={route().current('about')}>About Us</MobileNavLink>
                     </div>
+                    {
+                        auth.user ?
+                        <div className="space-y-1 px-2 pb-3 pt-2">
+                            <hr />
+                            <MobileNavLink href={route('profile.edit')}>Profile</MobileNavLink>
+                            <MobileNavLink href={route('logout')} method="post" as="button">Logout</MobileNavLink>
+                        </div> 
+                        : null
+                    }
                 </div>
             </nav>
         </div>
