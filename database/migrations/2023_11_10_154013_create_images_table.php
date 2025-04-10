@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('medium')->nullable();
             $table->string('thumbnail')->nullable();
             $table->timestamps();
+            
+            $table->unique('name');
         });
     }
 

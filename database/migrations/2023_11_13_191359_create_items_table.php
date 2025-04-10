@@ -33,10 +33,12 @@ return new class extends Migration
 
             $table->string('title');
             $table->text('description');
-            $table->unsignedDouble('price', 8, 2);
+            $table->double('price');
             $table->integer('count');
             $table->softDeletes();
             $table->timestamps();
+
+            $table->index(['price']);
         });
     }
 

@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Tag;
 use App\Models\Item;
 use App\Models\Color;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -20,7 +21,8 @@ class ItemRepository
      * @param array $data
      * @return Item
      */
-    public function createItem(int $user_id, array $data): Item {
+    public function createItem(int $user_id, array $data): Item 
+    {
         $itemData = [
             'user_id'     => $user_id,
             'image_id'    => $data['imageId'],
@@ -34,8 +36,26 @@ class ItemRepository
         $item = Item::create($itemData);
         $item->tags()->sync($data['collections']);
         $this->syncColor($item, $data['color']);
+        $this->clearCacheAfterItemCreation($data['collections']);
         Cache::flush();
         return $item;
+    }
+
+       /**
+     * Clear the cache of the collections related to the item created
+     *
+     * @param array $collectionIds
+     */
+    private function clearCacheAfterItemCreation(array $collectionIds): void
+    {
+        Tag::whereIn('id', $collectionIds)
+            ->get()
+            ->each(function (Tag $collection) {
+                Cache::forget("items_{$collection->value}");
+            });
+
+        Cache::forget('items_all');
+        Cache::forget('latest_sales_items');
     }
 
     /**
