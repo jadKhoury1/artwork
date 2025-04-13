@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helper;
+use App\Jobs\ImageResize;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use App\Base\BaseController;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ImageController extends BaseController
@@ -24,32 +27,26 @@ class ImageController extends BaseController
         ]);
 
         $image = $request->file('image');
-        $imageName = $image->getClientOriginalName();
+        $imageName = date('mdYHis') . '-'. uniqid()  . '-' . $image->getClientOriginalName();
 
         // Store image in S3
+        Log::debug('STORING IMAGE IN S3');
         Storage::disk('s3')->putFileAs('original', $image, $imageName);
 
         // Store image info in the database
+        Log::debug('CREATING IMAGE RECORD');
         $imageRecord = Image::create([
             'name' => $imageName,
-            'original' => $this->getBaseS3Url() . '/original/' . $imageName
+            'original' => Helper::GetBaseS3Url() . '/original/' . $imageName
         ]);
+
+        Log::debug('DISPATCHING IMAGE RESIZE JOB');
+        ImageResize::dispatch($imageRecord);
 
         return $this->response->statusOk([
             'id' => $imageRecord->id,
             'name' => $imageName,
             'original' => $imageRecord->original,
         ]);
-    }
-
-    /**
-     * Build the base URL for the images stored in s3
-     * @return string
-     */
-    private function getBaseS3Url(): string
-    {
-        return 'https://' . env('AWS_BUCKET', 'digital-artworks') . '.s3.'
-            . env('AWS_DEFAULT_REGION', 'eu-west-1')
-            . '.amazonaws.com';
     }
 }

@@ -1,6 +1,7 @@
-import PrimaryButton from "@/Components/PrimaryButton";
-import SecondaryButton from "@/Components/SecondaryButton";
-import { Link, } from "@inertiajs/react";
+import { Link } from '@inertiajs/react';
+import PrimaryButton from '@/Components/PrimaryButton';
+import SecondaryButton from '@/Components/SecondaryButton';
+
 
 const Description = () => {
     return (
@@ -28,7 +29,7 @@ const Description = () => {
                     <div className="flex flex-col justify-center">
                         <img 
                             className="rounded-2xl object-cover aspect-[2/3] h-60"
-                            src="https://cosmic-nextjs-marketplace.vercel.app/_next/image?url=https%3A%2F%2Fimgix.cosmicjs.com%2F461dc5a0-fa1b-11ec-b2b1-473235369c53-fuu-j-Lo7venJywM-unsplash.jpg&w=3840&q=60"
+                            src="https://digital-artwork.s3.eu-west-1.amazonaws.com/medium/mood-girl.avif"
                         />
                     </div>
                     <div 
@@ -36,22 +37,22 @@ const Description = () => {
                     >
                         <img
                             className="rounded-2xl mb-2 object-cover aspect-[2/3] h-48"
-                            src="https://cosmic-nextjs-marketplace.vercel.app/_next/image?url=https%3A%2F%2Fimgix.cosmicjs.com%2F41ebb4b0-fa1b-11ec-b2b1-473235369c53-selection-pic-12x.jpg&w=3840&q=60"
+                            src="https://digital-artwork.s3.eu-west-1.amazonaws.com/medium/bird.avif"
                         />
 
                         <img
                             className="rounded-2xl mt-2 object-cover aspect-[2/3] h-48"
-                            src="https://cosmic-nextjs-marketplace.vercel.app/_next/image?url=https%3A%2F%2Fimgix.cosmicjs.com%2F4e23c1f0-fa1b-11ec-b2b1-473235369c53-philipp-potocnik-5rsNohd8bY8-unsplash.jpg&w=3840&q=60"
+                            src="https://digital-artwork.s3.eu-west-1.amazonaws.com/medium/sunny-girl.avif"
                         />
                     </div>
                     <div className="hidden lg:flex lg:flex-col pt-5">
                         <img
                             className="rounded-2xl mb-2 object-cover aspect-[2/3] h-48"
-                            src="https://cosmic-nextjs-marketplace.vercel.app/_next/image?url=https%3A%2F%2Fimgix.cosmicjs.com%2F4ebf3ea0-fa1b-11ec-b2b1-473235369c53-cash-uJAIZP-J5Tg-unsplash.jpg&w=3840&q=60"
+                            src="https://digital-artwork.s3.eu-west-1.amazonaws.com/medium/portal-purple.avif"
                         />
                         <img
                             className="rounded-2xl mb-2 object-cover aspect-[2/3] h-48"
-                            src="https://cosmic-nextjs-marketplace.vercel.app/_next/image?url=https%3A%2F%2Fimgix.cosmicjs.com%2F4baa8490-fa1b-11ec-b2b1-473235369c53-nick-brunner-LXspKUjsgH0-unsplash.jpg&w=3840&q=60"
+                            src="https://digital-artwork.s3.eu-west-1.amazonaws.com/medium/astronaut.avif"
                         />
                     </div>
                 </div>

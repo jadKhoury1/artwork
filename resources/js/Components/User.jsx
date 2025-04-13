@@ -1,3 +1,4 @@
+import Vapor from 'laravel-vapor';
 import { usePage } from '@inertiajs/react';
 import Dropdown from '@/Components/Dropdown';
 
@@ -17,7 +18,7 @@ const User = () => {
                     <div className="w-7 md:w-8 mr-5 rounded-full">
                         <img
                             alt="user_avatar"
-                            src="/images/avatar.png" 
+                            src={Vapor.asset('images/avatar.png')}
                         />
                     </div>
                     <div className="capitalize text-gray-700 dark:text-white font-bold">

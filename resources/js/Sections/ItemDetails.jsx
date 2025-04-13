@@ -1,4 +1,7 @@
 import cn from 'classnames';
+import { useState } from 'react';
+import { useForm } from '@inertiajs/react'
+import Vapor from 'laravel-vapor';
 import Section from '../Components/Section';
 import DropdownSearch from '../Components/DropdownSearch';
 import Price from '../Components/Price';
@@ -7,11 +10,14 @@ import Tabs from '../Components/Tabs';
 
 
 const ItemDetails = ({ item, preview = false }) => {
+
+    const [quantity, setQuantity] = useState(1);
+
     return (
         <Section>
             <div className={cn("grid grid-cols-1 gap-x-20 mb-10", {"lg:grid-cols-2": !preview})}>
                 <div className="mt-5">
-                    <img src={item.image.original || '/images/default-image.avif'} alt={item.image.name} />
+                    <img src={item.image.original || Vapor.asset('images/default-image.avif')} alt={item.image.name} />
                 </div>
                 <div className={cn("mt-5", {"lg:mt-0": !preview})}>
                     <h2 
@@ -36,15 +42,28 @@ const ItemDetails = ({ item, preview = false }) => {
                     </div> : null }
                     <div className="mt-10">
                         <DropdownSearch  
-                            selected={1}
+                            selected={quantity}
                             list={stock(item.count)}
-                            handleChange={item => console.log('ITEM SELECTED: ', item)}
+                            handleChange={itemQuantity => setQuantity(itemQuantity)}
                         />
                     </div>
                     <div className="mt-8">
-                        <div>
-                            <PrimaryButton>Buy Now</PrimaryButton>
-                        </div>
+                        { !preview ? 
+                            <form 
+                                action={route('items.checkout', { item: item.id })}
+                                method="GET"
+                            >
+                                <input type="hidden" name="quantity" value={quantity}/>
+                                <PrimaryButton>
+                                    Buy Now
+                                </PrimaryButton>
+                            </form> : 
+                            <div>
+                                <PrimaryButton>
+                                    Buy Now
+                                </PrimaryButton>
+                            </div> 
+                        }
                     </div>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 import { useState, memo } from 'react';
-import { Link, router } from '@inertiajs/react'
+import { Link } from '@inertiajs/react'
 import Icon from '../Components/Icon';
 import Price from './Price';
 import PrimaryButton from './PrimaryButton';
@@ -28,7 +28,7 @@ const Card = ({ card }) => {
                         <Link href={itemlink}>
                             <div className="h-full">
                                 <img 
-                                    src={card.image.original} 
+                                    src={card.image.medium || card.image.original} 
                                     alt="Front of men&#039;s Basic Tee in black." 
                                     className="group-hover:opacity-70 h-full w-full object-cover object-center lg:h-full lg:w-full"
                                 />

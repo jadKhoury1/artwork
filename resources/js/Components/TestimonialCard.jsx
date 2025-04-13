@@ -1,3 +1,5 @@
+import Vapor from 'laravel-vapor';
+
 const TestimonialCard = ({ name, description, backgroundColor, imageName }) => {
     return (
         <div className="shadow-lg bg-white rounded-t-lg overflow-hidden">
@@ -5,7 +7,7 @@ const TestimonialCard = ({ name, description, backgroundColor, imageName }) => {
             <div className="rounded-full overflow-hidden w-28 -mt-16 mx-auto border-2 border-white bg-white">
                 <img
                     className="w-full h-auto rounded-full "
-                    src={`/images/${imageName}`}
+                    src={Vapor.asset(`images/${imageName}`)}
                 />
             </div>
             <div className="p-6 bg-white font-bold">

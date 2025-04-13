@@ -3,6 +3,7 @@
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -31,6 +32,7 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::post('/items/create', [ItemController::class, 'store'])->name('items.store');
     Route::get('/items/create', [ItemController::class, 'create'])->name('items.create');
+    Route::get('/items/checkout/{item}', PaymentController::class)->name('items.checkout');
 });
 
 Route::get('/items/search', [ItemController::class, 'index'])->name('items.search');

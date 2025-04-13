@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { useContext } from 'react';
 import cs from 'classnames';
+import Vapor from 'laravel-vapor';
 import NavLink from './NavLink';
 import Theme from './Theme';
 import SocialMedia from './SocialMedia';
@@ -20,7 +21,7 @@ const Footer = () => {
                             <img 
                                 className="block h-14 w-auto fill-current"
                                 alt="Logo"
-                                src="/images/logo.avif"
+                                src={Vapor.asset('images/logo.avif')}
                             />
                         </Link>
                     </div>
@@ -64,21 +65,25 @@ const Footer = () => {
                 <div className="flex flex-col items-center md:items-start md:border-0 pb-10 md:pb-0 text-lg">
                     <h3 className="grow">About The Product</h3>
                     <div className="my-2">
-                        <NavLink 
-                            href={route('welcome')} 
-                            className="text-white font-black hover:text-white"
+                        <a
+                            href="https://github.com/jadKhoury1/artwork"
+                            target="_blank"
+                            aria-hidden="true"
+                            className="text-white dark:text dark:text-gray-300 text-base px-1 pt-1"
                         >
                             Documentation
-                        </NavLink>
+                        </a>
                     </div>
 
                     <div className="my-2">
-                        <NavLink 
-                            href="/" 
-                            className="text-white font-bold hover:text-white"
+                        <a
+                            href="https://github.com/jadKhoury1"
+                            target="_blank"
+                            aria-hidden="true"
+                            className="text-white dark:text dark:text-gray-300 text-base px-1 pt-1"
                         >
                             Contact Us
-                        </NavLink>
+                        </a>
                     </div>
 
                     <div className="my-2">

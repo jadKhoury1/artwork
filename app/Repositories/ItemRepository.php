@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Support\Facades\Log;
 
 class ItemRepository
 {
@@ -20,7 +21,8 @@ class ItemRepository
      * @param array $data
      * @return Item
      */
-    public function createItem(int $user_id, array $data): Item {
+    public function createItem(int $user_id, array $data): Item
+    {
         $itemData = [
             'user_id'     => $user_id,
             'image_id'    => $data['imageId'],
@@ -34,8 +36,25 @@ class ItemRepository
         $item = Item::create($itemData);
         $item->tags()->sync($data['collections']);
         $this->syncColor($item, $data['color']);
-        Cache::flush();
+        $this->clearCacheAfterItemCreation($data['collections']);
         return $item;
+    }
+
+    /**
+     * Clear the cache of the collections related to the item created
+     *
+     * @param array $collectionIds
+     */
+    private function clearCacheAfterItemCreation(array $collectionIds): void
+    {
+        Tag::whereIn('id', $collectionIds)
+            ->get()
+            ->each(function (Tag $collection) {
+                Cache::forget("items_{$collection->value}");
+            });
+
+        Cache::forget('items_all');
+        Cache::forget('latest_sales_items');
     }
 
     /**
@@ -99,7 +118,6 @@ class ItemRepository
         if (!$shouldCache) {
             return $this->searchItems($filters)->orderByDesc('id')->paginate($perPage);
         }
-
         // Try to fetch the items from cache, otherwise store the items in cache for a duration of one day
         return Cache::remember(
             !isset($filters['collection']) ? 'items_all' : "items_{$filters['collection']}",
