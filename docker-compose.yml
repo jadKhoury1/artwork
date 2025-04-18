@@ -1,28 +1,36 @@
 services:
-    laravel.test:
+    php:
         build:
-            context: ./vendor/laravel/sail/runtimes/8.2
-            dockerfile: Dockerfile
-            args:
-                WWWGROUP: '${WWWGROUP}'
-        image: sail-8.2/app
-        extra_hosts:
-            - 'host.docker.internal:host-gateway'
-        ports:
-            - '${APP_PORT:-80}:80'
-            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
-        environment:
-            WWWUSER: '${WWWUSER}'
-            LARAVEL_SAIL: 1
-            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
-            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
-            IGNITION_LOCAL_SITES_PATH: '${PWD}'
+            context: .
+            dockerfile: docker/Dockerfile
+        container_name: laravel_app
+        restart: unless-stopped
         volumes:
-            - '.:/var/www/html'
+            - '.:/var/www'
         networks:
-            - sail
+            - app-network
         depends_on:
             - pgsql
+            - redis
+
+     # Nginx Service
+    nginx:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile.nginx
+        container_name: laravel_nginx
+        restart: unless-stopped
+        ports:
+            - "80:80"
+        volumes:
+            - ./:/var/www
+            - ./storage:/var/www/storage
+        networks:
+            - app-network
+        depends_on:
+            - php
+        environment:
+            - APP_ENV=local
     pgsql:
         image: 'postgres:15'
         ports:
@@ -33,10 +41,10 @@ services:
             POSTGRES_USER: '${DB_USERNAME}'
             POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
         volumes:
-            - 'sail-pgsql:/var/lib/postgresql/data'
+            - 'dbdata:/var/lib/postgresql/dataa'
             - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
         networks:
-            - sail
+            - app-network
         healthcheck:
             test:
                 - CMD
@@ -53,9 +61,9 @@ services:
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
         volumes:
-            - 'sail-redis:/data'
+            - 'redisdata:/data'
         networks:
-            - sail
+            - app-network
         healthcheck:
             test:
                 - CMD
@@ -64,10 +72,10 @@ services:
             retries: 3
             timeout: 5s
 networks:
-    sail:
+    app-network:
         driver: bridge
 volumes:
-    sail-pgsql:
+    dbdata:
         driver: local
-    sail-redis:
+    redisdata:
         driver: local

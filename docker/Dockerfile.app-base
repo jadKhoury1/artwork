@@ -1,0 +1,47 @@
+FROM php:8.3-fpm-alpine
+
+# Set gosu version
+ENV GOSU_VERSION=1.14
+
+# Install system dependencies
+RUN apk add --no-cache \
+    postgresql-dev \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    libwebp-dev \
+    libavif-dev \
+    libpng-dev \
+    libzip-dev \
+    curl-dev \
+    oniguruma-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    git \
+    curl \
+    linux-headers \
+    bash \
+    supervisor 
+
+# Install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-avif && \
+    docker-php-ext-install \
+    pdo \
+    pdo_pgsql \
+    pgsql \
+    mbstring \
+    zip \
+    bcmath \
+    xml \
+    fileinfo \
+    gd
+
+# Install Redis extension
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    && apk del .build-deps
+
+# Install Node.js and npm
+RUN apk add --no-cache nodejs npm
+
