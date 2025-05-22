@@ -6,6 +6,9 @@ COPY docker/nginx.conf /etc/nginx/conf.d/
 # Create directory for the app
 RUN mkdir -p /var/www/public
 
+# Copy existing application directory
+COPY ./public/ /var/www/public
+
 # Expose port 80
 EXPOSE 80
 
