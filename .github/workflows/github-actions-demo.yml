@@ -33,10 +33,18 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::882907016759:role/github-actions-artwork
           aws-region: eu-west-1
-      # Hello from AWS: WhoAmI
       - name: Sts GetCallerIdentity
         run: |
           aws sts get-caller-identity
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
+      - name: Build Docker image
+        run: |
+          docker build -f docker/Dockerfile -t artwork-app:latest .
+      - name: Tag Docker image
+        run: |
+          docker tag artwork-app:latest ${{ steps.login-ecr.outputs.registry }}/artwork:latest
+      - name: Push Docker image to Amazon ECR
+        run: |
+          docker push ${{ steps.login-ecr.outputs.registry }}/artwork:latest
