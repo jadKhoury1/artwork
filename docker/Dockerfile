@@ -1,4 +1,4 @@
-FROM laravel-php-fpm-base:latest
+FROM artwork-base:latest
 
 #  set php.ini
 COPY docker/php.ini $PHP_INI_DIR/conf.d/local.ini

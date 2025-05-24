@@ -1,0 +1,36 @@
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on: 
+    workflow_dispatch
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+    Push-ECR-Image:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out repository code
+              uses: actions/checkout@v4
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                role-to-assume: arn:aws:iam::882907016759:role/github-actions-artwork
+                aws-region: eu-west-1
+            - name: Sts GetCallerIdentity
+              run: |
+                aws sts get-caller-identity
+            - name: Login to Amazon ECR
+              id: login-ecr
+              uses: aws-actions/amazon-ecr-login@v2
+            - name: Build Base Docker image
+              run: |
+                docker build -f docker/Dockerfile.app-base -t artwork-base:latest .
+            - name: Tag Docker image
+              run: |
+                docker tag artwork-base:latest ${{ steps.login-ecr.outputs.registry }}/artwork/base:latest
+            - name: Push Docker image to Amazon ECR
+              run: |
+                docker push ${{ steps.login-ecr.outputs.registry }}/artwork/base:latest
+   
