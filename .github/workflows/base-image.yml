@@ -1,6 +1,8 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+name: Build and Push Base Docker Image to ECR
+on: 
+  push:
+    paths:
+      - 'docker/Dockerfile.app-base'
 permissions:
   id-token: write
   contents: read
