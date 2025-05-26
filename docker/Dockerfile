@@ -1,4 +1,4 @@
-FROM artwork-base:latest
+FROM 882907016759.dkr.ecr.eu-west-1.amazonaws.com/artwork/base:latest
 
 #  set php.ini
 COPY docker/php.ini $PHP_INI_DIR/conf.d/local.ini

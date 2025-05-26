@@ -1,5 +1,10 @@
 name: Build and Push, and deploy nginx
-on: [push]
+on: 
+    push:
+        paths:
+        - 'docker/Dockerfile.nginx'
+        - 'docker/nginx.conf'
+        - '.github/workflows/nginx-deployment.yml'
 permissions:
   id-token: write
   contents: read
@@ -21,7 +26,7 @@ jobs:
             - name: Login to Amazon ECR
               id: login-ecr
               uses: aws-actions/amazon-ecr-login@v2
-            - name: Build Base Docker image
+            - name: Build Nginx image
               run: |
                 docker build -f docker/Dockerfile.nginx -t nginx:latest .
             - name: Tag Docker image
