@@ -24,10 +24,29 @@ jobs:
             - name: Build App image
               run: |
                 docker build -f docker/Dockerfile -t artwork-app:latest .
-            - name: Tag Docker image
+            - name: Tag App Docker image
               run: |
                 docker tag artwork-app:latest ${{ steps.login-ecr.outputs.registry }}/artwork/app:latest
-            - name: Push Docker image to Amazon ECR
+            - name: Push App Docker image to Amazon ECR
               run: |
                 docker push ${{ steps.login-ecr.outputs.registry }}/artwork/app:latest
+            - name: Create temporary app container
+              run: |
+                docker create --name app-temp artwork-app:latest
+            - name: Copy Build Assets From Container
+              run: |
+                docker cp app-temp:/var/www/html/public ./docker/app/public
+            - name: Remove temporary app container
+              run: |
+                docker rm app-temp
+            - name: Build Nginx image
+              run: |
+                docker build -f docker/Dockerfile.nginx -t nginx:latest .
+            - name: Tag Nginx Docker image
+              run: |
+                docker tag nginx:latest ${{ steps.login-ecr.outputs.registry }}/artwork/nginx:latest
+            - name: Push Nginx Docker image to Amazon ECR
+              run: |
+                docker push ${{ steps.login-ecr.outputs.registry }}/artwork/nginx:latest
+   
    
