@@ -35,7 +35,7 @@ jobs:
                 docker create --name app-temp artwork-app:latest
             - name: Copy Build Assets From Container
               run: |
-                docker cp app-temp:/var/www/html/public ./docker/app/public
+                docker cp app-temp:/var/www/html/public/build ./public/build
             - name: Remove temporary app container
               run: |
                 docker rm app-temp
